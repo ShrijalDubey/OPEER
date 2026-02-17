@@ -12,8 +12,9 @@ const Navbar = () => {
   const navigate = useNavigate(); // Function to change pages
 
  const navItems = [
+  { label: "Home", link: "/", type: "page" },
   { label: "Getting started", link: "/#features", type: "scroll" }, 
-  { label: "Join a Thread", link: "/join", type: "page" },
+  { label: "Join a Thread", link: "/join-thread", type: "page" },
   { label: "Join a Project", link: "/join-project", type: "page" }, // New link added
   { label: "Upload Project", link: "/#features", type: "scroll" }, 
   { label: "Contribute", link: "https://github.com/ShrijalDubey/OPEER/tree/main", type: "external" },

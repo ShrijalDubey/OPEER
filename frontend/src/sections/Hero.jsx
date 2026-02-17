@@ -1,12 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './Hero.module.css';
 
 const Hero = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
   
   const scrollToFeatures = () => {
     const featuresSection = document.getElementById('features');
     if (featuresSection) {
       featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // 1. Function to handle navigation to the Join page
+  const handleFindThread = () => {
+    if (searchTerm.trim()) {
+      navigate('/join-thread', { state: { query: searchTerm } });
+    } else {
+      navigate('/join-thread');
+    }
+  };
+
+  // 2. Function to listen for Enter key
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      handleFindThread();
     }
   };
 
@@ -37,8 +56,16 @@ const Hero = () => {
               type="text" 
               placeholder="Enter your college (e.g. iitb, mit)" 
               className={styles.searchInput}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={handleKeyDown} // Trigger on Enter
             />
-            <button className={styles.joinButton}>Find My Thread</button>
+            <button 
+              className={styles.joinButton} 
+              onClick={handleFindThread} // Trigger on Click
+            >
+              Find My Thread
+            </button>
           </div>
           
           <div className={styles.secondaryActions}>

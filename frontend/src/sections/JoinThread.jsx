@@ -1,8 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import styles from './JoinThread.module.css';
 
 const JoinThread = () => {
+  const location = useLocation();
   const [searchTerm, setSearchTerm] = useState('');
+
+  // 1. Listen for the search term coming from the Hero section
+  useEffect(() => {
+    if (location.state && location.state.query) {
+      setSearchTerm(location.state.query);
+      
+      // Clean up state so refreshing doesn't keep the search term forever
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const threads = [
     { id: 1, name: "iitb", members: "1.2k", online: "142", desc: "The hub for IIT Bombay researchers, founders, and builders." },
@@ -49,33 +61,35 @@ const JoinThread = () => {
 
         {/* Grid */}
         <div className={styles.grid}>
-          {filteredThreads.map((thread) => (
-            <div key={thread.id} className={styles.card}>
-              
-              {/* TOP ROW: Name takes the icon's old space */}
-              <div className={styles.cardTop}>
-                <h3 className={styles.threadName}>
-                  <span>/</span>{thread.name}
-                </h3>
-                <div className={styles.statsBadge}>
-                  <div className={styles.onlineDot}></div>
-                  {thread.members}
+          {filteredThreads.length > 0 ? (
+            filteredThreads.map((thread) => (
+              <div key={thread.id} className={styles.card}>
+                <div className={styles.cardTop}>
+                  <h3 className={styles.threadName}>
+                    <span>/</span>{thread.name}
+                  </h3>
+                  <div className={styles.statsBadge}>
+                    <div className={styles.onlineDot}></div>
+                    {thread.members}
+                  </div>
                 </div>
+                
+                <p className={styles.threadDesc}>{thread.desc}</p>
+                
+                <button className={styles.joinBtn}>
+                  Join Thread 
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14"></path>
+                    <path d="M12 5l7 7-7 7"></path>
+                  </svg>
+                </button>
               </div>
-              
-              {/* DESCRIPTION */}
-              <p className={styles.threadDesc}>{thread.desc}</p>
-              
-              {/* BUTTON */}
-              <button className={styles.joinBtn}>
-                Join Thread 
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14"></path>
-                  <path d="M12 5l7 7-7 7"></path>
-                </svg>
-              </button>
+            ))
+          ) : (
+            <div className={styles.noResults}>
+              <p>No hubs found matching "{searchTerm}"</p>
             </div>
-          ))}
+          )}
 
           {/* Create New Card */}
           <div className={`${styles.card} ${styles.createCard}`}>

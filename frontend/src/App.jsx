@@ -22,7 +22,7 @@ function App() {
         
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/join" element={<JoinPage />} />
+          <Route path="/join-thread" element={<JoinPage />} />
           <Route path="/join-project" element={<JoinProject />} />
         </Routes>
 

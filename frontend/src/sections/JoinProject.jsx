@@ -55,7 +55,7 @@ const JoinProject = () => {
   // VIEW 1: JOINED HUBS DIRECTORY
   if (!selectedThread) {
     return (
-      <section className={styles.section}>
+      <section className={styles.section} id="join-project">
         <div className={styles.container}>
           <div className={styles.header}>
             <h1 className={styles.title}>Your <span className={styles.highlight}>Joined Hubs</span></h1>

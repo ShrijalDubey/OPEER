@@ -2,6 +2,14 @@ import React from 'react';
 import styles from '../styles/hero.module.css';
 
 const Hero = () => {
+  
+  const scrollToFeatures = () => {
+    const featuresSection = document.getElementById('features');
+    if (featuresSection) {
+      featuresSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className={styles.heroContainer}>
       <div className={styles.backgroundEffect}></div>
@@ -34,7 +42,10 @@ const Hero = () => {
           </div>
           
           <div className={styles.secondaryActions}>
-            <button className={styles.getStartedButton}>
+            <button 
+              className={styles.getStartedButton}
+              onClick={scrollToFeatures}
+            >
               Getting Started
             </button>
           </div>

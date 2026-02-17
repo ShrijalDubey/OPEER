@@ -3,7 +3,7 @@ import styles from '../styles/features.module.css';
 
 const Features = () => {
   return (
-    <section className={styles.section}>
+    <section className={styles.section} id="features">
       <div className={styles.container}>
         <div className={styles.intro}>
           <h2 className={styles.mainTitle}>Build. Connect. <span className={styles.accent}>Ship.</span></h2>
@@ -11,7 +11,6 @@ const Features = () => {
         </div>
 
         <div className={styles.featureList}>
-          {/* Feature 1 */}
           <div className={styles.featureItem}>
             <div className={styles.number}>01</div>
             <div className={styles.textSide}>
@@ -23,7 +22,6 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Feature 2 */}
           <div className={styles.featureItem}>
             <div className={styles.number}>02</div>
             <div className={styles.textSide}>
@@ -35,7 +33,6 @@ const Features = () => {
             </div>
           </div>
 
-          {/* Feature 3 */}
           <div className={styles.featureItem}>
             <div className={styles.number}>03</div>
             <div className={styles.textSide}>

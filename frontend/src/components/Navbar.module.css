@@ -17,6 +17,7 @@
 .brand {
   display: flex;
   align-items: center;
+  cursor: pointer;
 }
 
 .logoImage {

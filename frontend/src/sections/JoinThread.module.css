@@ -1,0 +1,247 @@
+.section {
+  padding: 120px 24px;
+  background-color: #09090b;
+  /* Restored the subtle ambient glow */
+  background-image: radial-gradient(circle at 50% 0%, rgba(129, 140, 248, 0.15) 0%, transparent 60%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* --- Header --- */
+.header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.title {
+  font-size: 56px;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 20px;
+  letter-spacing: -2px;
+  line-height: 1.1;
+  text-shadow: 0 0 40px rgba(129, 140, 248, 0.3); /* Text Glow */
+}
+
+.highlight {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  color: #a1a1aa;
+  font-size: 18px;
+  max-width: 580px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* --- Search Bar --- */
+.searchWrapper {
+  position: relative;
+  max-width: 500px;
+  margin: 0 auto 80px auto;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #71717a;
+  width: 20px;
+  height: 20px;
+  transition: color 0.3s ease;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 20px 20px 20px 56px;
+  border-radius: 16px;
+  background-color: rgba(24, 24, 27, 0.8);
+  border: 1px solid #27272a;
+  color: #fff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  outline: none;
+  backdrop-filter: blur(10px);
+}
+
+.searchInput:focus {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15), 0 0 20px rgba(129, 140, 248, 0.2);
+  background-color: #18181b;
+}
+
+.searchInput:focus + .searchIcon {
+  color: #818cf8;
+}
+
+.searchInput::placeholder {
+  color: #52525b;
+}
+
+/* --- Grid Layout --- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+}
+
+/* --- Card Styling --- */
+.card {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover Effect: Lift + Glow + Border */
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #6366f1;
+  box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3); /* Purple Glow */
+}
+
+/* Top Row: Name (Left) + Stats (Right) */
+.cardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+.threadName {
+  font-size: 26px; /* Bigger Title */
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.threadName span {
+  color: #6366f1; /* Color the "/" */
+}
+
+.statsBadge {
+  background: #27272a;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #a1a1aa;
+  border: 1px solid #3f3f46;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.onlineDot {
+  width: 6px;
+  height: 6px;
+  background-color: #4ade80;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #4ade80;
+}
+
+.threadDesc {
+  font-size: 15px;
+  color: #a1a1aa;
+  line-height: 1.6;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+/* Join Button */
+.joinBtn {
+  margin-top: auto;
+  width: 100%;
+  padding: 12px;
+  background: #27272a;
+  color: #fff;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.card:hover .joinBtn {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* --- "Create New" Card --- */
+.createCard {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed #52525b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.createCard:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: #818cf8;
+  box-shadow: 0 0 30px rgba(129, 140, 248, 0.1);
+}
+
+.plusIcon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #18181b;
+  border: 1px solid #3f3f46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #a1a1aa;
+  margin-bottom: 16px;
+  transition: all 0.3s ease;
+}
+
+.createCard:hover .plusIcon {
+  color: #818cf8;
+  border-color: #818cf8;
+  transform: rotate(90deg);
+}
+
+.createTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.createDesc {
+  font-size: 14px;
+  color: #71717a;
+}
+
+@media (max-width: 768px) {
+  .section { padding: 80px 20px; }
+  .title { font-size: 36px; }
+  .grid { grid-template-columns: 1fr; }
+}

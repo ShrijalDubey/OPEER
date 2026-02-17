@@ -1,18 +1,35 @@
-import React from 'react'
-import Navbar from './components/navbar';
-import Hero from './components/hero';
-import Features from './components/features';
-import Footer from './components/footer';
-import Testimonials from './components/testimonials';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
-export default function App() {
+// Pages
+import Home from './pages/Home';
+import JoinPage from './pages/JoinPage';
+import JoinProject from './sections/JoinProject'; 
+
+
+
+
+// Styles
+import './App.css'; 
+
+function App() {
   return (
-    <div>
-      <Navbar />
-      <Hero />
-      <Features />
-      <Testimonials />
-      <Footer />
-    </div>
-  )
+    <Router>
+      <div className="app-container">
+        <Navbar />
+        
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/join" element={<JoinPage />} />
+          <Route path="/join-project" element={<JoinProject />} />
+        </Routes>
+
+        <Footer />
+      </div>
+    </Router>
+  );
 }
+
+export default App;

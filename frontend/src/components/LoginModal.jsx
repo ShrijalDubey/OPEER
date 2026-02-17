@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styles from '../styles/loginModal.module.css';
+import styles from './LoginModal.module.css';
 
 const LoginModal = ({ isOpen, onClose }) => {
   

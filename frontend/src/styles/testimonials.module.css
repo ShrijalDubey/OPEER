@@ -1,0 +1,148 @@
+.wrapper {
+  padding: 80px 74px;
+  background-color: #121214;
+  border-top: 1px solid #1e1e21;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.title {
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -1px;
+}
+
+.highlight {
+  background: linear-gradient(90deg, #818cf8, #c084fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto 100px auto;
+}
+
+.card {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 28px;
+  transition: transform 0.2s ease, border-color 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #818cf8;
+}
+
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #27272a, #3f3f46);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  border: 1px solid #3f3f46;
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userInfo strong {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.userInfo span {
+  color: #71717a;
+  font-size: 13px;
+}
+
+.reviewText {
+  color: #d4d4d8;
+  font-size: 15px;
+  line-height: 1.6;
+  font-style: italic;
+}
+
+
+.faqSection {
+  border-top: 1px solid #27272a;
+  padding-top: 80px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.faqTitle {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 60px;
+  letter-spacing: -1px;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 50px;
+}
+
+.questionBox {
+  margin-bottom: 10px;
+}
+
+.question {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f4f4f5;
+  margin-bottom: 10px;
+}
+
+.answer {
+  font-size: 16px;
+  color: #a1a1aa;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    padding: 60px 24px;
+  }
+  .title, .faqTitle {
+    font-size: 28px;
+  }
+  .grid {
+    margin-bottom: 60px;
+  }
+  .faqGrid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}

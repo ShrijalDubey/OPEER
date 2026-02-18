@@ -1,79 +1,214 @@
+/* ========== NAVBAR ========== */
 .header {
-  background-color: #121214;
-  color: #fbfbfb;
+  background-color: #111113;
+  color: #fafafa;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.brand {
-  display: flex;
-  align-items: center;
-  /* Vertically centers the text in the container */
-  justify-content: center;
-  cursor: pointer;
-  height: 100%;
-  /* Ensures it takes up the full height of the parent */
-}
-
-.logoText {
-  font-size: 26px;
-  font-weight: 1000;
-  /* Extra bold for impact */
-  letter-spacing: 2px;
-  /* Spaced out for that "premium/thin" look */
-  color: #ffffff;
-  text-transform: uppercase;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  /* Centering Fixes */
-  line-height: 1;
-  /* Removes extra spacing around letters */
-  display: inline-block;
-
-  /* Subtle glow to make it "pop" against the dark background */
-  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
-
-  transition: all 0.3s ease;
-  user-select: none;
-}
-
-.brand:hover .logoText {
-  color: #818cf8;
-  /* Matches your toggle switch color on hover */
-  transform: scale(1.02);
-}
-
-/* Ensure the topSection container isn't squishing the brand */
+/* ── Top Bar ── */
 .topSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 74px;
-  /* Increased padding slightly for breathing room */
-  border-bottom: 1px solid #27272a;
-  background-color: #18181b;
-  min-height: 70px;
-  /* Explicit height helps with centering */
+  padding: 0 64px;
+  height: 68px;
+  background: #111113;
+  border-bottom: 1px solid #1e1e22;
 }
 
+/* Brand / Logo */
+.brand {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  gap: 10px;
+}
+
+.logoText {
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #fafafa;
+  text-transform: uppercase;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: contain;
+  filter: brightness(1.1);
+}
+
+.brand:hover .logoText {
+  letter-spacing: 5px;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4), 0 0 20px rgba(129, 140, 248, 0.3);
+}
+
+/* Top Right Actions */
 .topRight {
   display: flex;
   align-items: center;
-  gap: 16px;
-  /* Space between Github, Bell, User */
+  gap: 14px;
+}
+
+.githubWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #71717a;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.githubWrapper:hover {
+  color: #fafafa;
+  background: #1e1e22;
+}
+
+.githubIcon {
+  width: 20px;
+  height: 20px;
 }
 
 .loginBtn {
-  background-color: #ffffff;
-  color: #000000;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
   border: none;
-  padding: 8px 20px;
-  border-radius: 6px;
+  padding: 9px 24px;
+  border-radius: 10px;
   font-weight: 600;
   font-size: 14px;
   cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
 }
 
+.loginBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(79, 70, 229, 0.4);
+}
+
+/* User Section */
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.userAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  overflow: hidden;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.userAvatar:hover {
+  border-color: #818cf8;
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logoutBtn {
+  background: none;
+  border: 1px solid #27272a;
+  color: #71717a;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+
+/* ── Navigation Links Bar ── */
+.bottomSection {
+  padding: 0;
+  background: #0e0e10;
+  border-bottom: 1px solid #1e1e22;
+}
+
+.navLinks {
+  display: flex;
+  list-style-type: none;
+  margin: 0;
+  padding: 0 64px;
+  gap: 0;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.navLinks::-webkit-scrollbar {
+  display: none;
+}
+
+.navLink {
+  text-decoration: none;
+  color: #71717a;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: all 0.2s;
+  padding: 14px 20px;
+  display: block;
+  position: relative;
+}
+
+.navLink:hover {
+  color: #fafafa;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.navLink::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: #818cf8;
+  border-radius: 1px;
+  transition: width 0.2s;
+}
+
+.navLink:hover::after {
+  width: 60%;
+}
+
+/* ── Toggle (unused but keeping for compatibility) ── */
 .toggleSwitch {
   position: relative;
   width: 50px;
@@ -124,105 +259,24 @@
   transform: translateX(22px);
 }
 
-.githubWrapper {
-  display: flex;
-  align-items: center;
-  color: #d7d7dc;
-}
-
-.githubIcon {
-  width: 22px;
-  height: 22px;
-}
-
-.bottomSection {
-  padding: 12px 0;
-  background-color: #121214;
-}
-
-.navLinks {
-  display: flex;
-  list-style-type: none;
-  margin: 0;
-  padding: 0px 74px;
-  gap: 32px;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.navLinks::-webkit-scrollbar {
-  display: none;
-}
-
-.navLink {
-  text-decoration: none;
-  color: #b9b9c0;
-  font-size: 14px;
-  white-space: nowrap;
-  transition: color 0.2s;
-}
-
-.navLink:hover {
-  color: #ffffff;
-}
-
-/* User avatar when logged in */
-.userSection {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.userAvatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #818cf8, #6366f1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 14px;
-  color: #fff;
-  overflow: hidden;
-  transition: transform 0.2s;
-}
-
-.userAvatar:hover {
-  transform: scale(1.08);
-}
-
-.avatarImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.logoutBtn {
-  background: none;
-  border: 1px solid #3f3f46;
-  color: #a1a1aa;
-  padding: 6px 14px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.2s;
-}
-
-.logoutBtn:hover {
-  border-color: #ef4444;
-  color: #ef4444;
-}
-
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .topSection {
-    padding: 12px 20px;
+    padding: 0 20px;
+    height: 60px;
+  }
+
+  .logoText {
+    font-size: 20px;
+    letter-spacing: 2px;
   }
 
   .navLinks {
-    padding: 0 20px;
-    gap: 20px;
+    padding: 0 16px;
+  }
+
+  .navLink {
+    padding: 12px 14px;
+    font-size: 12px;
   }
 }

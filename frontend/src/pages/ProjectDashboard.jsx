@@ -186,10 +186,10 @@ const ProjectDashboard = () => {
     // Layout Styles
     const containerStyle = {
         display: 'grid',
-        gridTemplateColumns: '380px 1fr', // Sidebar (Info Card) + Chat Card
+        gridTemplateColumns: '420px 1fr',
         gridTemplateRows: '1fr',
         gap: '16px',
-        height: 'calc(100vh - 112px)', // Adjust for Navbar
+        height: 'calc(100vh - 112px)',
         padding: '16px',
         background: '#09090b',
         boxSizing: 'border-box',
@@ -206,34 +206,69 @@ const ProjectDashboard = () => {
         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
     };
 
+    const sectionLabelStyle = {
+        fontSize: '13px', color: '#a1a1aa', fontWeight: '700',
+        textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '14px',
+        display: 'flex', alignItems: 'center', gap: '8px'
+    };
+
     return (
         <div style={containerStyle}>
-            {/* LEFT COLUMN: INFO (Single Card) */}
-            <div style={{ ...cardStyle, padding: '24px', gap: '32px', overflowY: 'auto' }}>
+            {/* LEFT COLUMN: INFO PANEL */}
+            <div style={{ ...cardStyle, padding: '28px', gap: '0', overflowY: 'auto' }}>
 
                 {/* 1. Header Section */}
-                <div>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
-                        <button onClick={() => navigate('/projects')} style={{ background: '#27272a', border: 'none', width: '32px', height: '32px', borderRadius: '50%', color: '#a1a1aa', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>←</button>
+                <div style={{ marginBottom: '28px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                        <button onClick={() => navigate('/projects')} style={{
+                            background: '#27272a', border: 'none', width: '36px', height: '36px',
+                            borderRadius: '10px', color: '#a1a1aa', cursor: 'pointer',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: '16px', transition: 'all 0.2s'
+                        }}>←</button>
                         {isOwner && (
                             <button
                                 onClick={editingInfo ? handleSaveInfo : () => setEditingInfo(true)}
-                                style={{ background: editingInfo ? '#4f46e5' : '#27272a', color: editingInfo ? '#fff' : '#a1a1aa', border: 'none', padding: '6px 16px', borderRadius: '20px', fontSize: '12px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+                                style={{
+                                    background: editingInfo ? '#4f46e5' : '#27272a',
+                                    color: editingInfo ? '#fff' : '#a1a1aa',
+                                    border: editingInfo ? 'none' : '1px solid #3f3f46',
+                                    padding: '8px 20px', borderRadius: '10px',
+                                    fontSize: '13px', fontWeight: '600', cursor: 'pointer',
+                                    transition: 'all 0.2s',
+                                    boxShadow: editingInfo ? '0 4px 12px rgba(79,70,229,0.3)' : 'none'
+                                }}
                             >
-                                {editingInfo ? 'Save' : 'Edit'}
+                                {editingInfo ? '✓ Save Changes' : '✎ Edit'}
                             </button>
                         )}
                     </div>
-                    <h2 style={{ fontSize: '24px', fontWeight: '800', margin: '0 0 12px 0', color: '#fafafa', lineHeight: '1.2' }}>{project.title}</h2>
-                    <p style={{ fontSize: '14px', color: '#d4d4d8', margin: 0, lineHeight: '1.6' }}>
+                    <h2 style={{
+                        fontSize: '28px', fontWeight: '800', margin: '0 0 12px 0',
+                        color: '#fafafa', lineHeight: '1.2',
+                        background: 'linear-gradient(135deg, #fafafa 0%, #a1a1aa 100%)',
+                        WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'
+                    }}>{project.title}</h2>
+                    <p style={{ fontSize: '15px', color: '#d4d4d8', margin: 0, lineHeight: '1.7' }}>
                         {project.description}
                     </p>
+
+                    {/* Skills tags */}
+                    {project.skills?.length > 0 && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '14px' }}>
+                            {project.skills.map((skill, i) => (
+                                <span key={i} style={{
+                                    background: 'rgba(79,70,229,0.1)', color: '#818cf8',
+                                    padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '600',
+                                    border: '1px solid rgba(79,70,229,0.15)'
+                                }}>{skill}</span>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
-                <div style={{ width: '100%', height: '1px', background: '#27272a' }}></div>
-
                 {/* 2. Goal Section */}
-                <div>
+                <div style={{ background: '#141416', borderRadius: '16px', padding: '18px 20px', marginBottom: '12px', border: '1px solid #1e1e22' }}>
                     <InputField
                         label="🎯 Main Goal"
                         value={editingInfo ? infoForm.goal : project.goal}
@@ -246,7 +281,7 @@ const ProjectDashboard = () => {
                 </div>
 
                 {/* 3. Execution Plan Section */}
-                <div>
+                <div style={{ background: '#141416', borderRadius: '16px', padding: '18px 20px', marginBottom: '12px', border: '1px solid #1e1e22' }}>
                     <InputField
                         label="📋 Execution Plan"
                         value={editingInfo ? infoForm.executionPlan : project.executionPlan}
@@ -259,7 +294,7 @@ const ProjectDashboard = () => {
                 </div>
 
                 {/* 4. Resources Section */}
-                <div>
+                <div style={{ background: '#141416', borderRadius: '16px', padding: '18px 20px', marginBottom: '24px', border: '1px solid #1e1e22' }}>
                     <InputField
                         label="🔗 Resources"
                         value={editingInfo ? infoForm.resources : project.resources}
@@ -271,36 +306,45 @@ const ProjectDashboard = () => {
                     />
                 </div>
 
-                <div style={{ width: '100%', height: '1px', background: '#27272a' }}></div>
-
                 {/* 5. Team Members */}
-                <div>
-                    <h3 style={{ fontSize: '11px', color: '#a1a1aa', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px' }}>Team Members</h3>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div style={{ marginBottom: '24px' }}>
+                    <h3 style={sectionLabelStyle}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
+                        Team ({1 + (project.applications?.length || 0)})
+                    </h3>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         {/* Owner */}
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '12px',
+                            padding: '10px 14px', background: 'rgba(79,70,229,0.06)',
+                            borderRadius: '12px', border: '1px solid rgba(79,70,229,0.1)'
+                        }}>
                             <img
                                 src={project.author?.avatarUrl || `https://ui-avatars.com/api/?name=${project.author?.name}&background=random`}
                                 alt=""
-                                style={{ width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #818cf8' }}
+                                style={{ width: '34px', height: '34px', borderRadius: '50%', border: '2px solid #818cf8' }}
                             />
-                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ fontSize: '13px', color: '#fafafa', fontWeight: '500' }}>{project.author?.name}</span>
-                                <span style={{ fontSize: '10px', color: '#818cf8' }}>Owner</span>
+                            <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: '15px', color: '#fafafa', fontWeight: '600' }}>{project.author?.name}</div>
+                                <div style={{ fontSize: '12px', color: '#818cf8', fontWeight: '500' }}>Owner</div>
                             </div>
                         </div>
 
                         {/* Members */}
                         {project.applications?.map((app) => (
-                            <div key={app.user.id} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <div key={app.user.id} style={{
+                                display: 'flex', alignItems: 'center', gap: '12px',
+                                padding: '10px 14px', background: '#141416',
+                                borderRadius: '12px', border: '1px solid #1e1e22'
+                            }}>
                                 <img
                                     src={app.user.avatarUrl || `https://ui-avatars.com/api/?name=${app.user.name}&background=random`}
                                     alt=""
-                                    style={{ width: '24px', height: '24px', borderRadius: '50%', border: '1px solid #3f3f46' }}
+                                    style={{ width: '34px', height: '34px', borderRadius: '50%', border: '2px solid #3f3f46' }}
                                 />
-                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                    <span style={{ fontSize: '13px', color: '#e4e4e7' }}>{app.user.name}</span>
-                                    <span style={{ fontSize: '10px', color: '#71717a' }}>Member</span>
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ fontSize: '15px', color: '#e4e4e7', fontWeight: '500' }}>{app.user.name}</div>
+                                    <div style={{ fontSize: '12px', color: '#71717a' }}>Member</div>
                                 </div>
                             </div>
                         ))}
@@ -309,44 +353,111 @@ const ProjectDashboard = () => {
 
                 {/* 6. Pending Requests (Owner Only) */}
                 {isOwner && pendingApps.length > 0 && (
-                    <>
-                        <div style={{ width: '100%', height: '1px', background: '#27272a' }}></div>
-                        <div>
-                            <h3 style={{ fontSize: '11px', color: '#fbbf24', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#fbbf24' }}></span>
-                                Pending Requests
-                            </h3>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                                {pendingApps.map((app) => (
-                                    <div key={app.id} style={{ background: '#27272a', padding: '12px', borderRadius: '12px', border: '1px solid #3f3f46' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                                            <img
-                                                src={app.user.avatarUrl || `https://ui-avatars.com/api/?name=${app.user.name}&background=random`}
-                                                alt=""
-                                                style={{ width: '24px', height: '24px', borderRadius: '50%' }}
-                                            />
-                                            <span style={{ fontSize: '13px', color: '#fff', fontWeight: '500' }}>{app.user.name}</span>
+                    <div>
+                        <h3 style={{ ...sectionLabelStyle, color: '#fbbf24' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24', boxShadow: '0 0 8px rgba(251,191,36,0.4)' }}></span>
+                            Pending Requests ({pendingApps.length})
+                        </h3>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                            {pendingApps.map((app) => (
+                                <div key={app.id} style={{
+                                    background: '#141416', padding: '20px', borderRadius: '16px',
+                                    border: '1px solid #27272a', transition: 'border-color 0.2s'
+                                }}>
+                                    {/* Applicant Header */}
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '14px' }}>
+                                        <img
+                                            src={app.user.avatarUrl || `https://ui-avatars.com/api/?name=${app.user.name}&background=random`}
+                                            alt=""
+                                            style={{ width: '44px', height: '44px', borderRadius: '50%', border: '2px solid #3f3f46' }}
+                                        />
+                                        <div style={{ flex: 1 }}>
+                                            <div style={{ fontSize: '16px', color: '#fafafa', fontWeight: '600' }}>{app.user.name}</div>
+                                            <div style={{ fontSize: '13px', color: '#71717a' }}>{app.user.email}</div>
                                         </div>
-                                        {app.message && <p style={{ fontSize: '12px', color: '#a1a1aa', margin: '0 0 10px 0', lineHeight: '1.4', fontStyle: 'italic' }}>"{app.message}"</p>}
-                                        <div style={{ display: 'flex', gap: '8px' }}>
-                                            <button
-                                                onClick={() => handleAppStatus(app.id, 'accepted')}
-                                                style={{ flex: 1, padding: '6px', background: '#4ade80', color: '#000', border: 'none', borderRadius: '6px', fontSize: '11px', fontWeight: '600', cursor: 'pointer' }}
-                                            >
-                                                Accept
-                                            </button>
-                                            <button
-                                                onClick={() => handleAppStatus(app.id, 'rejected')}
-                                                style={{ flex: 1, padding: '6px', background: '#27272a', border: '1px solid #ef4444', color: '#ef4444', borderRadius: '6px', fontSize: '11px', fontWeight: '600', cursor: 'pointer' }}
-                                            >
-                                                Reject
-                                            </button>
+                                        <div style={{ fontSize: '12px', color: '#52525b', background: '#1e1e22', padding: '4px 10px', borderRadius: '8px' }}>
+                                            {new Date(app.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+
+                                    {/* Profile Info Pills */}
+                                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
+                                        {app.user.college && (
+                                            <span style={{ background: '#1e1e22', color: '#d4d4d8', padding: '5px 14px', borderRadius: '20px', fontSize: '13px', fontWeight: '500' }}>
+                                                🎓 {app.user.college}
+                                            </span>
+                                        )}
+                                        {app.user.year && (
+                                            <span style={{ background: '#1e1e22', color: '#d4d4d8', padding: '5px 14px', borderRadius: '20px', fontSize: '13px', fontWeight: '500' }}>
+                                                📅 {app.user.year}
+                                            </span>
+                                        )}
+                                        {app.user.githubUrl && (
+                                            <a href={app.user.githubUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} style={{ background: '#1e1e22', color: '#d4d4d8', padding: '5px 14px', borderRadius: '20px', fontSize: '13px', fontWeight: '500', textDecoration: 'none' }}>
+                                                🔗 GitHub
+                                            </a>
+                                        )}
+                                    </div>
+
+                                    {/* Skills */}
+                                    {app.user.skills?.length > 0 && (
+                                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '12px' }}>
+                                            {app.user.skills.map((skill, i) => (
+                                                <span key={i} style={{
+                                                    background: 'rgba(79,70,229,0.1)', color: '#a5b4fc',
+                                                    padding: '4px 12px', borderRadius: '8px', fontSize: '12px', fontWeight: '600',
+                                                    border: '1px solid rgba(79,70,229,0.15)'
+                                                }}>
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Bio */}
+                                    {app.user.bio && (
+                                        <p style={{ fontSize: '14px', color: '#a1a1aa', margin: '0 0 12px 0', lineHeight: '1.6', fontStyle: 'italic' }}>
+                                            "{app.user.bio}"
+                                        </p>
+                                    )}
+
+                                    {/* Contribution Message */}
+                                    {app.message && (
+                                        <div style={{ background: '#09090b', border: '1px solid #27272a', borderRadius: '12px', padding: '14px 16px', marginBottom: '14px' }}>
+                                            <div style={{ fontSize: '12px', color: '#71717a', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>How they want to contribute</div>
+                                            <p style={{ fontSize: '14px', color: '#e4e4e7', margin: 0, lineHeight: '1.7' }}>{app.message}</p>
+                                        </div>
+                                    )}
+
+                                    {/* Actions */}
+                                    <div style={{ display: 'flex', gap: '10px' }}>
+                                        <button
+                                            onClick={() => handleAppStatus(app.id, 'accepted')}
+                                            style={{
+                                                flex: 1, padding: '11px', background: '#22c55e', color: '#000',
+                                                border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: '700',
+                                                cursor: 'pointer', transition: 'all 0.2s',
+                                                boxShadow: '0 2px 8px rgba(34,197,94,0.2)'
+                                            }}
+                                        >
+                                            ✓ Accept
+                                        </button>
+                                        <button
+                                            onClick={() => handleAppStatus(app.id, 'rejected')}
+                                            style={{
+                                                flex: 1, padding: '11px', background: 'transparent',
+                                                border: '1px solid #3f3f46', color: '#ef4444',
+                                                borderRadius: '10px', fontSize: '14px', fontWeight: '700',
+                                                cursor: 'pointer', transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            ✕ Reject
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
-                    </>
+                    </div>
                 )}
             </div>
 
@@ -506,27 +617,27 @@ const ProjectDashboard = () => {
 
 // Helper for input fields (Outside component to prevent focus loss)
 const InputField = ({ label, value, field, placeholder, multiline = false, editing, onChange }) => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1, minHeight: 0 }}>
-        <label style={{ fontSize: '11px', color: '#71717a', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{label}</label>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', flex: 1, minHeight: 0 }}>
+        <label style={{ fontSize: '13px', color: '#a1a1aa', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.8px' }}>{label}</label>
         {editing ? (
             multiline ? (
                 <textarea
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    style={{ width: '100%', flex: 1, padding: '12px', background: '#09090b', border: '1px solid #3f3f46', borderRadius: '12px', color: '#fafafa', fontSize: '13px', lineHeight: '1.5', resize: 'none', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
+                    style={{ width: '100%', flex: 1, padding: '12px 14px', background: '#09090b', border: '1px solid #3f3f46', borderRadius: '12px', color: '#fafafa', fontSize: '14px', lineHeight: '1.6', resize: 'none', outline: 'none', transition: 'border-color 0.2s', fontFamily: 'inherit', boxSizing: 'border-box' }}
                     placeholder={placeholder}
                 />
             ) : (
                 <input
                     value={value}
                     onChange={(e) => onChange(e.target.value)}
-                    style={{ width: '100%', padding: '12px', background: '#09090b', border: '1px solid #3f3f46', borderRadius: '12px', color: '#fafafa', fontSize: '13px', outline: 'none', fontFamily: 'inherit' }}
+                    style={{ width: '100%', padding: '12px 14px', background: '#09090b', border: '1px solid #3f3f46', borderRadius: '12px', color: '#fafafa', fontSize: '14px', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' }}
                     placeholder={placeholder}
                 />
             )
         ) : (
             <div style={{ flex: 1, overflowY: 'auto' }}>
-                <p style={{ fontSize: '14px', color: value ? '#fafafa' : '#52525b', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>{value || 'Not set.'}</p>
+                <p style={{ fontSize: '15px', color: value ? '#e4e4e7' : '#52525b', whiteSpace: 'pre-wrap', lineHeight: '1.7', margin: 0 }}>{value || 'Not set.'}</p>
             </div>
         )}
     </div>

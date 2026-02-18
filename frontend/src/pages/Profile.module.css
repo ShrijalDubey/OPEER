@@ -1,20 +1,43 @@
+/* ========== PROFILE PAGE ========== */
 .section {
     min-height: calc(100vh - 80px);
-    padding: 60px 20px;
-    background: #18181b;
+    padding: 48px 24px 80px;
+    background: #111113;
 }
 
 .container {
-    max-width: 720px;
+    max-width: 780px;
     margin: 0 auto;
 }
 
-/* Profile Header */
+/* ========== PROFILE HERO CARD ========== */
+.profileCard {
+    background: #141416;
+    border: 1px solid #1e1e22;
+    border-radius: 24px;
+    padding: 36px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+}
+
+.profileCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+    background: linear-gradient(135deg, rgba(79, 70, 229, 0.12) 0%, rgba(129, 140, 248, 0.06) 100%);
+    pointer-events: none;
+}
+
 .profileHeader {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
 }
 
 .avatarSection {
@@ -24,141 +47,185 @@
 }
 
 .avatar {
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #27272a;
+    border: 3px solid #27272a;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .avatarPlaceholder {
-    width: 72px;
-    height: 72px;
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
     background: linear-gradient(135deg, #818cf8, #6366f1);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 28px;
+    font-size: 32px;
     font-weight: 800;
     color: #fff;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
 }
 
 .userInfo {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
 }
 
 .userName {
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 800;
     color: #fafafa;
     margin: 0;
+    line-height: 1.2;
 }
 
 .userEmail {
-    font-size: 14px;
+    font-size: 15px;
     color: #71717a;
     margin: 0;
 }
 
 .metaTags {
     display: flex;
-    gap: 10px;
-    margin-top: 6px;
+    gap: 8px;
+    margin-top: 8px;
     flex-wrap: wrap;
 }
 
 .metaTag {
-    font-size: 12px;
-    color: #a1a1aa;
-    background: #18181b;
-    padding: 4px 10px;
-    border-radius: 6px;
-    border: 1px solid #27272a;
+    font-size: 13px;
+    color: #d4d4d8;
+    background: #1e1e22;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-weight: 500;
 }
 
 .headerActions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     align-items: center;
 }
 
 .editBtn {
-    background: rgba(129, 140, 248, 0.1);
-    border: 1px solid rgba(129, 140, 248, 0.2);
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px solid rgba(79, 70, 229, 0.2);
     color: #a5b4fc;
-    padding: 8px 18px;
-    border-radius: 8px;
+    padding: 10px 22px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     transition: all 0.2s;
 }
 
 .editBtn:hover {
-    background: rgba(129, 140, 248, 0.15);
+    background: rgba(79, 70, 229, 0.18);
     border-color: #818cf8;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
 }
 
 .logoutBtn {
     background: none;
-    border: 1px solid #3f3f46;
-    color: #a1a1aa;
-    padding: 8px 18px;
-    border-radius: 8px;
+    border: 1px solid #27272a;
+    color: #71717a;
+    padding: 10px 22px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
+    font-weight: 500;
     transition: all 0.2s;
 }
 
 .logoutBtn:hover {
     border-color: #ef4444;
     color: #ef4444;
+    background: rgba(239, 68, 68, 0.06);
 }
 
-/* Edit Section */
+/* ========== BIO & SKILLS (inside card) ========== */
+.bioText {
+    color: #d4d4d8;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 20px 0 0;
+    position: relative;
+    z-index: 1;
+}
+
+.skillsRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    position: relative;
+    z-index: 1;
+}
+
+.skillPill {
+    background: rgba(79, 70, 229, 0.1);
+    border: 1px solid rgba(79, 70, 229, 0.15);
+    color: #a5b4fc;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ========== EDIT SECTION ========== */
 .editSection {
-    background: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 12px;
-    padding: 24px;
-    margin-bottom: 24px;
+    background: #141416;
+    border: 1px solid #1e1e22;
+    border-radius: 20px;
+    padding: 28px;
+    margin-bottom: 28px;
+}
+
+.sectionLabel {
+    font-size: 13px;
+    font-weight: 700;
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
 }
 
 .editGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 14px;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
 .editField {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin-bottom: 14px;
+    gap: 6px;
+    margin-bottom: 16px;
 }
 
 .editField label {
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 700;
     color: #a1a1aa;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
 }
 
 .editField input,
 .editField select,
 .editField textarea {
     width: 100%;
-    padding: 10px 14px;
+    padding: 12px 16px;
     background: #09090b;
     border: 1px solid #27272a;
-    border-radius: 8px;
+    border-radius: 12px;
     color: #fafafa;
-    font-size: 14px;
+    font-size: 15px;
     font-family: inherit;
     outline: none;
     transition: border-color 0.2s;
@@ -168,30 +235,43 @@
 .editField input:focus,
 .editField select:focus,
 .editField textarea:focus {
-    border-color: #818cf8;
+    border-color: #4f46e5;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
 .editField textarea {
     resize: none;
+    line-height: 1.6;
+}
+
+.editField select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
 }
 
 .saveBtn {
-    padding: 10px 24px;
-    background: linear-gradient(135deg, #818cf8, #6366f1);
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
     color: #fff;
     font-weight: 700;
     font-size: 14px;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: all 0.2s;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .saveBtn:hover:not(:disabled) {
-    opacity: 0.9;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
 }
 
 .saveBtn:disabled {
@@ -199,60 +279,19 @@
     cursor: not-allowed;
 }
 
-/* Bio */
-.bioSection {
-    background: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
-}
-
-.bioSection p {
-    color: #d4d4d8;
-    font-size: 15px;
-    line-height: 1.6;
-    margin: 0;
-}
-
-/* Skills */
-.skillsSection {
-    margin-bottom: 32px;
-}
-
-.sectionLabel {
-    font-size: 12px;
-    font-weight: 600;
-    color: #71717a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 10px;
-}
-
-.skillsList {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-}
-
-.skillPill {
-    background: rgba(129, 140, 248, 0.1);
-    border: 1px solid rgba(129, 140, 248, 0.2);
-    color: #a5b4fc;
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 13px;
-}
-
-/* Tabs */
+/* ========== TABS ========== */
 .tabs {
     display: flex;
     gap: 4px;
-    border-bottom: 1px solid #27272a;
-    margin-bottom: 20px;
+    background: #141416;
+    border: 1px solid #1e1e22;
+    border-radius: 16px;
+    padding: 6px;
+    margin-bottom: 24px;
 }
 
 .tab {
+    flex: 1;
     background: none;
     border: none;
     color: #71717a;
@@ -260,20 +299,23 @@
     cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    border-bottom: 2px solid transparent;
+    border-radius: 12px;
     transition: all 0.2s;
+    text-align: center;
 }
 
 .tab:hover {
     color: #d4d4d8;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .activeTab {
-    color: #818cf8;
-    border-bottom-color: #818cf8;
+    color: #fafafa;
+    background: #27272a;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Tab Content */
+/* ========== TAB CONTENT ========== */
 .tabContent {
     min-height: 200px;
 }
@@ -282,48 +324,53 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 20px;
-    background: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    transition: border-color 0.2s;
+    padding: 18px 22px;
+    background: #141416;
+    border: 1px solid #1e1e22;
+    border-radius: 16px;
+    margin-bottom: 10px;
+    transition: all 0.2s;
 }
 
 .listItem:hover {
-    border-color: #3f3f46;
+    border-color: #27272a;
+    background: #18181b;
 }
 
 .threadSlug {
     font-weight: 700;
     color: #818cf8;
+    font-size: 14px;
+    background: rgba(79, 70, 229, 0.1);
+    padding: 3px 10px;
+    border-radius: 6px;
     margin-right: 12px;
-    font-size: 15px;
 }
 
 .threadName {
-    color: #a1a1aa;
-    font-size: 14px;
+    color: #d4d4d8;
+    font-size: 15px;
+    font-weight: 500;
 }
 
 .projectTitle {
     font-weight: 600;
     color: #fafafa;
-    font-size: 15px;
+    font-size: 16px;
     display: block;
 }
 
 .projectMeta {
     color: #71717a;
-    font-size: 13px;
-    margin-top: 2px;
+    font-size: 14px;
+    margin-top: 3px;
     display: block;
 }
 
 .statusBadge {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
-    padding: 4px 12px;
+    padding: 6px 16px;
     border-radius: 20px;
     text-transform: capitalize;
 }
@@ -346,23 +393,24 @@
     border: 1px solid rgba(239, 68, 68, 0.2);
 }
 
-/* Action buttons */
+/* Action Buttons */
 .actionBtn {
     background: none;
     border: 1px solid #27272a;
-    color: #71717a;
-    padding: 5px 14px;
-    border-radius: 6px;
+    color: #a1a1aa;
+    padding: 8px 18px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     transition: all 0.2s;
     white-space: nowrap;
 }
 
 .actionBtn:hover {
-    border-color: #ef4444;
-    color: #f87171;
+    border-color: #3f3f46;
+    color: #d4d4d8;
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .deleteBtn {
@@ -379,18 +427,15 @@
     text-align: center;
     color: #52525b;
     font-size: 15px;
-    padding: 40px 0;
+    padding: 60px 0;
 }
 
-/* Applications Modal */
+/* ========== APPLICATIONS MODAL ========== */
 .modalOverlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(4px);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
     z-index: 1000;
     display: flex;
     align-items: center;
@@ -399,51 +444,65 @@
 }
 
 .modalCard {
-    background: #18181b;
-    border: 1px solid #27272a;
-    border-radius: 16px;
-    padding: 24px;
+    background: #141416;
+    border: 1px solid #1e1e22;
+    border-radius: 24px;
     width: 100%;
-    max-width: 500px;
+    max-width: 540px;
     max-height: 80vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
 }
 
 .modalHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    padding: 24px 28px;
+    border-bottom: 1px solid #1e1e22;
 }
 
 .modalTitle {
-    font-size: 18px;
+    font-size: 20px;
+    font-weight: 700;
     color: #fafafa;
     margin: 0;
 }
 
 .modalClose {
-    background: none;
+    background: #1e1e22;
     border: none;
     color: #71717a;
-    font-size: 24px;
+    font-size: 20px;
     cursor: pointer;
-    padding: 0;
-    line-height: 1;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.modalClose:hover {
+    background: #27272a;
+    color: #fafafa;
 }
 
 .modalBody {
     overflow-y: auto;
     flex: 1;
+    padding: 20px 28px 28px;
 }
 
 .applicantItem {
     background: #09090b;
-    border: 1px solid #27272a;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 12px;
+    border: 1px solid #1e1e22;
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 14px;
 }
 
 .applicantHeader {
@@ -456,102 +515,111 @@
 .applicantInfo h4 {
     margin: 0;
     color: #fafafa;
-    font-size: 15px;
+    font-size: 16px;
+    font-weight: 600;
 }
 
 .applicantMeta {
     color: #71717a;
-    font-size: 12px;
-    margin: 2px 0 0;
+    font-size: 13px;
+    margin: 4px 0 0;
 }
 
 .applicantMessage {
-    background: #18181b;
-    padding: 10px;
-    border-radius: 8px;
-    font-size: 13px;
+    background: #141416;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
     color: #d4d4d8;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     font-style: italic;
+    line-height: 1.6;
+    border: 1px solid #1e1e22;
 }
 
 .applicantActions {
     display: flex;
-    gap: 8px;
+    gap: 10px;
 }
 
 .approveBtn {
     flex: 1;
-    background: rgba(34, 197, 94, 0.1);
-    border: 1px solid rgba(34, 197, 94, 0.2);
-    color: #4ade80;
-    padding: 8px;
-    border-radius: 8px;
+    background: #22c55e;
+    border: none;
+    color: #000;
+    padding: 10px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
 }
 
 .approveBtn:hover {
-    background: rgba(34, 197, 94, 0.2);
+    opacity: 0.9;
+    transform: translateY(-1px);
 }
 
 .rejectBtn {
     flex: 1;
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-    color: #f87171;
-    padding: 8px;
-    border-radius: 8px;
+    background: transparent;
+    border: 1px solid #3f3f46;
+    color: #ef4444;
+    padding: 10px;
+    border-radius: 10px;
     cursor: pointer;
-    font-weight: 600;
-    font-size: 13px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all 0.2s;
 }
 
 .rejectBtn:hover {
-    background: rgba(239, 68, 68, 0.2);
+    border-color: #ef4444;
+    background: rgba(239, 68, 68, 0.06);
 }
 
 .statusLabel {
     display: block;
     text-align: center;
     width: 100%;
-    padding: 6px;
-    font-size: 13px;
+    padding: 8px;
+    font-size: 14px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
-/* Danger Zone */
+/* ========== DANGER ZONE ========== */
 .dangerZone {
     margin-top: 48px;
-    padding: 24px;
-    border: 1px solid rgba(239, 68, 68, 0.15);
-    border-radius: 12px;
+    padding: 28px;
+    border: 1px solid rgba(239, 68, 68, 0.12);
+    border-radius: 20px;
     background: rgba(239, 68, 68, 0.03);
 }
 
 .dangerTitle {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     color: #ef4444;
-    margin: 0 0 6px;
+    margin: 0 0 8px;
 }
 
 .dangerDesc {
-    font-size: 13px;
+    font-size: 14px;
     color: #71717a;
-    margin: 0 0 16px;
+    margin: 0 0 18px;
+    line-height: 1.5;
 }
 
 .dangerBtn {
     background: none;
-    border: 1px solid rgba(239, 68, 68, 0.3);
+    border: 1px solid rgba(239, 68, 68, 0.25);
     color: #f87171;
-    padding: 8px 20px;
-    border-radius: 8px;
+    padding: 10px 24px;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     transition: all 0.2s;
 }
@@ -561,14 +629,40 @@
     border-color: #ef4444;
 }
 
-@media (max-width: 600px) {
+/* ========== RESPONSIVE ========== */
+@media (max-width: 640px) {
+    .section {
+        padding: 32px 16px 60px;
+    }
+
+    .profileCard {
+        padding: 24px;
+    }
+
     .profileHeader {
         flex-direction: column;
-        gap: 16px;
+        gap: 20px;
+    }
+
+    .avatar,
+    .avatarPlaceholder {
+        width: 64px;
+        height: 64px;
+        font-size: 24px;
+    }
+
+    .userName {
+        font-size: 22px;
     }
 
     .headerActions {
         width: 100%;
+    }
+
+    .editBtn,
+    .logoutBtn {
+        flex: 1;
+        text-align: center;
     }
 
     .editGrid {
@@ -576,6 +670,16 @@
     }
 
     .tabs {
-        overflow-x: auto;
+        flex-direction: column;
+    }
+
+    .tab {
+        padding: 10px;
+    }
+
+    .listItem {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
     }
 }

@@ -280,9 +280,8 @@ const JoinProject = () => {
 
                   {proj.author?.id === user?.id ? (
                     <button
-                      className={styles.applyBtn}
+                      className={styles.deleteBtn}
                       onClick={() => handleDeleteProject(proj.id)}
-                      style={{ background: 'rgba(239,68,68,0.1)', borderColor: 'rgba(239,68,68,0.3)', color: '#f87171' }}
                     >
                       Delete Project
                     </button>

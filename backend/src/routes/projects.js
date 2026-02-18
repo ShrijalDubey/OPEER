@@ -139,13 +139,28 @@ router.get('/', optionalAuth, async (req, res) => {
             where,
             include: {
                 author: { select: { id: true, name: true, avatarUrl: true } },
-                applications: true,
-                thread: { select: { name: true, slug: true } } // Include thread info
+                thread: { select: { name: true, slug: true } }
             },
             orderBy: { createdAt: 'desc' },
         });
 
-        res.json({ projects });
+        let result = projects;
+        if (req.user) {
+            const myApps = await prisma.application.findMany({
+                where: {
+                    userId: req.user.id,
+                    projectId: { in: projects.map(p => p.id) }
+                },
+                select: { projectId: true, status: true }
+            });
+            const appMap = new Map(myApps.map(a => [a.projectId, a.status]));
+            result = projects.map(p => ({
+                ...p,
+                myApplication: appMap.get(p.id) || null
+            }));
+        }
+
+        res.json({ projects: result });
     } catch (err) {
         console.error('GET /api/projects error:', err);
         res.status(500).json({ error: 'Failed to fetch projects' });
@@ -154,7 +169,7 @@ router.get('/', optionalAuth, async (req, res) => {
 
 // ─── Get a single project ───────────────────────────────
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', optionalAuth, async (req, res) => {
     try {
         const project = await prisma.project.findUnique({
             where: { id: req.params.id },
@@ -173,10 +188,22 @@ router.get('/:id', async (req, res) => {
             return res.status(404).json({ error: 'Project not found' });
         }
 
+        let myApplication = null;
+        if (req.user) {
+            const app = await prisma.application.findUnique({
+                where: {
+                    userId_projectId: { userId: req.user.id, projectId: project.id }
+                },
+                select: { status: true }
+            });
+            myApplication = app?.status || null;
+        }
+
         res.json({
             project: {
                 ...project,
                 applicationCount: project._count.applications,
+                myApplication,
                 _count: undefined,
             },
         });
@@ -255,7 +282,7 @@ router.get('/:id/applications', requireAuth, async (req, res) => {
             where: { id: req.params.id },
             include: {
                 applications: {
-                    include: { user: { select: { id: true, name: true, email: true, avatarUrl: true, skills: true, year: true, college: true } } },
+                    include: { user: { select: { id: true, name: true, email: true, avatarUrl: true, skills: true, year: true, college: true, bio: true, githubUrl: true } } },
                     orderBy: { createdAt: 'desc' }
                 }
             }

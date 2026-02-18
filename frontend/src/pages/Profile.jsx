@@ -177,32 +177,46 @@ const Profile = () => {
         <section className={styles.section}>
             <div className={styles.container}>
 
-                {/* Header */}
-                <div className={`${styles.profileHeader} fadeInUp`}>
-                    <div className={styles.avatarSection}>
-                        {profileData.avatarUrl ? (
-                            <img src={profileData.avatarUrl} alt={profileData.name} className={styles.avatar} />
-                        ) : (
-                            <div className={styles.avatarPlaceholder}>
-                                {profileData.name?.charAt(0)?.toUpperCase()}
-                            </div>
-                        )}
-                        <div className={styles.userInfo}>
-                            <h1 className={styles.userName}>{profileData.name}</h1>
-                            <p className={styles.userEmail}>{profileData.email}</p>
-                            <div className={styles.metaTags}>
-                                {profileData.college && <span className={styles.metaTag}>🎓 {profileData.college}</span>}
-                                {profileData.year && <span className={styles.metaTag}>📅 {profileData.year}</span>}
-                                <span className={styles.metaTag}>🔗 {profileData.provider === 'google' ? 'Google' : 'GitHub'}</span>
+                {/* Profile Hero Card */}
+                <div className={`${styles.profileCard} fadeInUp`}>
+                    <div className={styles.profileHeader}>
+                        <div className={styles.avatarSection}>
+                            {profileData.avatarUrl ? (
+                                <img src={profileData.avatarUrl} alt={profileData.name} className={styles.avatar} />
+                            ) : (
+                                <div className={styles.avatarPlaceholder}>
+                                    {profileData.name?.charAt(0)?.toUpperCase()}
+                                </div>
+                            )}
+                            <div className={styles.userInfo}>
+                                <h1 className={styles.userName}>{profileData.name}</h1>
+                                <p className={styles.userEmail}>{profileData.email}</p>
+                                <div className={styles.metaTags}>
+                                    {profileData.college && <span className={styles.metaTag}>🎓 {profileData.college}</span>}
+                                    {profileData.year && <span className={styles.metaTag}>📅 {profileData.year}</span>}
+                                    <span className={styles.metaTag}>🔗 {profileData.provider === 'google' ? 'Google' : 'GitHub'}</span>
+                                </div>
                             </div>
                         </div>
+                        <div className={styles.headerActions}>
+                            <button className={styles.editBtn} onClick={editing ? () => setEditing(false) : startEditing}>
+                                {editing ? 'Cancel' : '✎ Edit Profile'}
+                            </button>
+                            <button className={styles.logoutBtn} onClick={handleLogout}>Log Out</button>
+                        </div>
                     </div>
-                    <div className={styles.headerActions}>
-                        <button className={styles.editBtn} onClick={editing ? () => setEditing(false) : startEditing}>
-                            {editing ? 'Cancel' : 'Edit Profile'}
-                        </button>
-                        <button className={styles.logoutBtn} onClick={handleLogout}>Log Out</button>
-                    </div>
+
+                    {/* Bio (inline in card) */}
+                    {!editing && profileData.bio && (
+                        <p className={styles.bioText}>{profileData.bio}</p>
+                    )}
+
+                    {/* Skills (inline in card) */}
+                    {!editing && profileData.skills?.length > 0 && (
+                        <div className={styles.skillsRow}>
+                            {profileData.skills.map((skill) => <span key={skill} className={styles.skillPill}>{skill}</span>)}
+                        </div>
+                    )}
                 </div>
 
                 {/* Edit Form */}
@@ -238,29 +252,9 @@ const Profile = () => {
                             <textarea value={editForm.bio} onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })} placeholder="About you..." rows={3} />
                         </div>
                         <button className={styles.saveBtn} onClick={handleSaveProfile} disabled={saving}>
-                            {saving ? <><span className="spinner" style={{ width: 14, height: 14 }}></span> Saving...</> : 'Save Changes'}
+                            {saving ? <><span className="spinner" style={{ width: 14, height: 14 }}></span> Saving...</> : '✓ Save Changes'}
                         </button>
                     </div>
-                )}
-
-                {/* Bio & Skills (when not editing) */}
-                {!editing && (
-                    <>
-                        {profileData.bio && (
-                            <div className={`${styles.bioSection} fadeInUp`} style={{ animationDelay: '60ms' }}>
-                                <p>{profileData.bio}</p>
-                            </div>
-                        )}
-
-                        {profileData.skills?.length > 0 && (
-                            <div className={`${styles.skillsSection} fadeInUp`} style={{ animationDelay: '120ms' }}>
-                                <h3 className={styles.sectionLabel}>Skills</h3>
-                                <div className={styles.skillsList}>
-                                    {profileData.skills.map((skill) => <span key={skill} className={styles.skillPill}>{skill}</span>)}
-                                </div>
-                            </div>
-                        )}
-                    </>
                 )}
 
                 {/* Tabs */}

@@ -4,6 +4,7 @@ import styles from './Navbar.module.css';
 import LoginModal from './LoginModal';
 import { useAuth } from '../context/AuthContext';
 import NotificationDropdown from './NotificationDropdown';
+import logoImg from '../assets/onlylogo.png';
 
 const Navbar = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -20,8 +21,7 @@ const Navbar = () => {
     { label: "Explore", link: "/explore", type: "page" },
     { label: "Projects", link: "/projects", type: "page" },
     { label: "Upload Project", link: "/upload", type: "page" },
-    { label: "Contribute", link: "https://github.com/ShrijalDubey/OPEER/tree/main", type: "external" },
-    { label: "Contact Us", link: "#contact", type: "scroll" }
+    { label: "Contribute", link: "https://github.com/ShrijalDubey/OPEER/tree/main", type: "external" }
   ];
 
   // Handling navigation clicks - some are pages, some are sections to scroll to, and one is external!
@@ -82,6 +82,7 @@ const Navbar = () => {
       <header className={styles.header}>
         <div className={styles.topSection}>
           <div className={styles.brand} onClick={handleLogoClick}>
+            <img src={logoImg} alt="OPEER" className={styles.logoIcon} />
             <span className={styles.logoText}>OPEER</span>
           </div>
 

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../components/Toast';
+import ApplyProjectModal from '../components/ApplyProjectModal';
 
 const ExploreProjects = () => {
     const { isLoggedIn, user, loading } = useAuth();
@@ -13,6 +14,7 @@ const ExploreProjects = () => {
     const [projects, setProjects] = useState([]);
     const [fetching, setFetching] = useState(true);
     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+    const [applyModal, setApplyModal] = useState({ open: false, projectId: null, projectTitle: '' });
 
     useEffect(() => {
         const fetchProjects = async () => {
@@ -40,42 +42,82 @@ const ExploreProjects = () => {
             }
         };
 
-        // Debounce search
-        const timeoutId = setTimeout(() => {
-            fetchProjects();
-        }, 300);
-
+        const timeoutId = setTimeout(() => { fetchProjects(); }, 300);
         return () => clearTimeout(timeoutId);
     }, [searchTerm, toast]);
 
-    // Update URL when search changes
     useEffect(() => {
-        if (searchTerm) {
-            setSearchParams({ search: searchTerm });
-        } else {
-            setSearchParams({});
-        }
+        if (searchTerm) { setSearchParams({ search: searchTerm }); }
+        else { setSearchParams({}); }
     }, [searchTerm, setSearchParams]);
 
-    // Update URL not strictly necessary for skills unless we want it linkable. 
-    // Keeping search sync for now.
-
-    const handleApply = async (projectId) => {
-        if (!isLoggedIn) {
-            toast.error('Please login to apply');
+    // Card click: only navigate for owners or accepted members
+    const handleProjectClick = (project) => {
+        if (project.author.id === user?.id) {
+            navigate(`/projects/${project.id}/dashboard`);
             return;
         }
-        // Logic to apply (simplified, redirects to project page/modal usually)
-        // For now, maybe just show a toast or open a modal?
-        // Actually, the Apply logic is usually on the project details or a modal.
-        // Let's assume we navigate to project dashboard if owner, or show apply modal?
-        // Simple: Navigate to dashboard if member, else show toast "Coming soon" or implement apply modal.
-        // Wait, regular users can't see dashboard unless member.
-        // So we need a "Public Project Page" or "Apply Modal".
-        // The task says "Investigate JoinProject flow".
-        // Use existing JoinProject flow?
-        navigate(`/projects/${projectId}/dashboard`); // This will 403 if not member.
-        // Ideally we need a public view.
+        if (project.myApplication === 'accepted') {
+            navigate(`/projects/${project.id}/dashboard`);
+            return;
+        }
+        // For everyone else, do nothing (they use the action button)
+    };
+
+    const handleApplyClick = (e, project) => {
+        e.stopPropagation();
+        if (!isLoggedIn) { toast.error('Please login to apply'); return; }
+        setApplyModal({ open: true, projectId: project.id, projectTitle: project.title });
+    };
+
+    const submitApplication = async (projectId, message) => {
+        const token = localStorage.getItem('opeer_token');
+        const res = await fetch(`/api/projects/${projectId}/apply`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ message }),
+        });
+
+        if (res.ok) {
+            toast.success('Application submitted!');
+            setProjects(prev => prev.map(p =>
+                p.id === projectId ? { ...p, myApplication: 'pending' } : p
+            ));
+        } else {
+            const data = await res.json();
+            toast.error(data.error || 'Failed to apply');
+        }
+    };
+
+    // Button styles
+    const btnStyle = (variant) => {
+        const base = { padding: '8px 16px', borderRadius: '8px', fontSize: '12px', fontWeight: '600', border: 'none', cursor: 'pointer', transition: 'all 0.2s' };
+        const variants = {
+            primary: { ...base, background: '#4f46e5', color: '#fff' },
+            success: { ...base, background: '#22c55e', color: '#000' },
+            secondary: { ...base, background: '#27272a', color: '#a1a1aa' },
+            disabled: { ...base, background: '#3f3f46', color: '#71717a', cursor: 'default' },
+            error: { ...base, background: 'rgba(239,68,68,0.1)', color: '#ef4444', cursor: 'default' },
+        };
+        return variants[variant] || base;
+    };
+
+    const getActionButton = (project) => {
+        if (project.author.id === user?.id) {
+            return <button onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}/dashboard`); }} style={btnStyle('secondary')}>Manage</button>;
+        }
+        if (!project.myApplication) {
+            return <button onClick={(e) => handleApplyClick(e, project)} style={btnStyle('primary')}>Apply</button>;
+        }
+        if (project.myApplication === 'pending') {
+            return <button disabled style={btnStyle('disabled')}>Applied</button>;
+        }
+        if (project.myApplication === 'accepted') {
+            return <button onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}/dashboard`); }} style={btnStyle('success')}>Enter</button>;
+        }
+        if (project.myApplication === 'rejected') {
+            return <button disabled style={btnStyle('error')}>Rejected</button>;
+        }
     };
 
     return (
@@ -94,33 +136,15 @@ const ExploreProjects = () => {
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
                         style={{
-                            width: '100%',
-                            padding: '16px 24px',
-                            paddingLeft: '50px',
-                            background: '#18181b',
-                            border: '1px solid #27272a',
-                            borderRadius: '12px',
-                            color: '#fff',
-                            fontSize: '16px',
-                            outline: 'none',
-                            transition: 'all 0.2s',
+                            width: '100%', padding: '16px 24px', paddingLeft: '50px',
+                            background: '#18181b', border: '1px solid #27272a', borderRadius: '12px',
+                            color: '#fff', fontSize: '16px', outline: 'none', transition: 'all 0.2s',
                             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
                         }}
                         onFocus={(e) => e.target.style.borderColor = '#4f46e5'}
                         onBlur={(e) => e.target.style.borderColor = '#27272a'}
                     />
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="20"
-                        height="20"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="#71717a"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)' }}
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ position: 'absolute', left: '20px', top: '50%', transform: 'translateY(-50%)' }}>
                         <circle cx="11" cy="11" r="8"></circle>
                         <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                     </svg>
@@ -135,17 +159,11 @@ const ExploreProjects = () => {
                         ) : (
                             projects.map(project => (
                                 <div key={project.id} style={{
-                                    background: '#18181b',
-                                    border: '1px solid #27272a',
-                                    borderRadius: '16px',
-                                    padding: '24px',
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    gap: '16px',
-                                    transition: 'transform 0.2s, borderColor 0.2s',
-                                    cursor: 'pointer'
+                                    background: '#18181b', border: '1px solid #27272a', borderRadius: '16px',
+                                    padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px',
+                                    transition: 'transform 0.2s, borderColor 0.2s', cursor: 'pointer'
                                 }}
-                                    onClick={() => navigate(`/projects/${project.id}/dashboard`)} // Needs public view ideally
+                                    onClick={() => handleProjectClick(project)}
                                     onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#3f3f46'; }}
                                     onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#27272a'; }}
                                 >
@@ -170,7 +188,7 @@ const ExploreProjects = () => {
                                             <img src={project.author.avatarUrl || `https://ui-avatars.com/api/?name=${project.author.name}&background=random`} alt="" style={{ width: '24px', height: '24px', borderRadius: '50%' }} />
                                             <span style={{ fontSize: '12px', color: '#71717a' }}>{project.author.name}</span>
                                         </div>
-                                        <span style={{ fontSize: '12px', color: '#52525b' }}>{new Date(project.createdAt).toLocaleDateString()}</span>
+                                        {isLoggedIn && getActionButton(project)}
                                     </div>
                                 </div>
                             ))
@@ -178,8 +196,17 @@ const ExploreProjects = () => {
                     </div>
                 )}
             </div>
+
+            <ApplyProjectModal
+                isOpen={applyModal.open}
+                onClose={() => setApplyModal({ open: false, projectId: null, projectTitle: '' })}
+                projectId={applyModal.projectId}
+                projectTitle={applyModal.projectTitle}
+                onApply={submitApplication}
+            />
         </div>
     );
 };
 
 export default ExploreProjects;
+

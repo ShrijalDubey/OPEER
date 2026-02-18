@@ -5,31 +5,62 @@
   width: 100%;
 }
 
+.brand {
+  display: flex;
+  align-items: center;
+  /* Vertically centers the text in the container */
+  justify-content: center;
+  cursor: pointer;
+  height: 100%;
+  /* Ensures it takes up the full height of the parent */
+}
+
+.logoText {
+  font-size: 26px;
+  font-weight: 1000;
+  /* Extra bold for impact */
+  letter-spacing: 2px;
+  /* Spaced out for that "premium/thin" look */
+  color: #ffffff;
+  text-transform: uppercase;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Centering Fixes */
+  line-height: 1;
+  /* Removes extra spacing around letters */
+  display: inline-block;
+
+  /* Subtle glow to make it "pop" against the dark background */
+  text-shadow: 0 0 1px rgba(255, 255, 255, 0.3);
+
+  transition: all 0.3s ease;
+  user-select: none;
+}
+
+.brand:hover .logoText {
+  color: #818cf8;
+  /* Matches your toggle switch color on hover */
+  transform: scale(1.02);
+}
+
+/* Ensure the topSection container isn't squishing the brand */
 .topSection {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 74px;
+  padding: 16px 74px;
+  /* Increased padding slightly for breathing room */
   border-bottom: 1px solid #27272a;
   background-color: #18181b;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-}
-
-.logoImage {
-  height: 40px;
-  width: auto;
-  object-fit: contain;
+  min-height: 70px;
+  /* Explicit height helps with centering */
 }
 
 .topRight {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  /* Space between Github, Bell, User */
 }
 
 .loginBtn {
@@ -76,7 +107,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggleThumb svg {
@@ -85,11 +116,11 @@
   color: #18181b;
 }
 
-.toggleInput:checked + .toggleLabel {
+.toggleInput:checked+.toggleLabel {
   background-color: #818cf8;
 }
 
-.toggleInput:checked + .toggleLabel .toggleThumb {
+.toggleInput:checked+.toggleLabel .toggleThumb {
   transform: translateX(22px);
 }
 
@@ -136,10 +167,60 @@
   color: #ffffff;
 }
 
+/* User avatar when logged in */
+.userSection {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.userAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.userAvatar:hover {
+  transform: scale(1.08);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.logoutBtn {
+  background: none;
+  border: 1px solid #3f3f46;
+  color: #a1a1aa;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
 @media (max-width: 768px) {
   .topSection {
     padding: 12px 20px;
   }
+
   .navLinks {
     padding: 0 20px;
     gap: 20px;

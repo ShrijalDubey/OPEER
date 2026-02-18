@@ -25,11 +25,13 @@
   margin-bottom: 20px;
   letter-spacing: -2px;
   line-height: 1.1;
-  text-shadow: 0 0 40px rgba(129, 140, 248, 0.3); /* Text Glow */
+  text-shadow: 0 0 40px rgba(129, 140, 248, 0.3);
+  /* Text Glow */
 }
 
 .highlight {
   background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -79,7 +81,7 @@
   background-color: #18181b;
 }
 
-.searchInput:focus + .searchIcon {
+.searchInput:focus+.searchIcon {
   color: #818cf8;
 }
 
@@ -114,7 +116,8 @@
 .card:hover {
   transform: translateY(-6px);
   border-color: #6366f1;
-  box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3); /* Purple Glow */
+  box-shadow: 0 20px 40px -12px rgba(99, 102, 241, 0.3);
+  /* Purple Glow */
 }
 
 /* Top Row: Name (Left) + Stats (Right) */
@@ -127,7 +130,8 @@
 }
 
 .threadName {
-  font-size: 26px; /* Bigger Title */
+  font-size: 26px;
+  /* Bigger Title */
   font-weight: 700;
   color: #fff;
   letter-spacing: -0.5px;
@@ -135,7 +139,8 @@
 }
 
 .threadName span {
-  color: #6366f1; /* Color the "/" */
+  color: #6366f1;
+  /* Color the "/" */
 }
 
 .statsBadge {
@@ -240,8 +245,175 @@
   color: #71717a;
 }
 
+/* --- Leave Button Variant --- */
+.leaveBtn {
+  background: rgba(239, 68, 68, 0.08);
+  color: #a1a1aa;
+  border: 1px solid #27272a;
+}
+
+.leaveBtn:hover {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+/* --- Show More Button --- */
+.showMoreBtn {
+  background: #18181b;
+  border: 1px solid #27272a;
+  color: #a1a1aa;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+}
+
+.showMoreBtn:hover {
+  border-color: #818cf8;
+  color: #fff;
+  background: #1e1e22;
+}
+
+/* --- No Results --- */
+.noResults {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: #52525b;
+  padding: 60px 0;
+  font-size: 16px;
+}
+
+/* ─── Create Thread Modal ─────────────────────── */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeInScale 0.25s ease-out;
+}
+
+.modalCard {
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.modalTitle {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fafafa;
+  margin: 0 0 4px;
+}
+
+.modalSubtitle {
+  font-size: 13px;
+  color: #71717a;
+  margin: 0 0 20px;
+}
+
+.modalForm {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modalField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modalField label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modalField input {
+  width: 100%;
+  padding: 10px 14px;
+  background: #09090b;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  color: #fafafa;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+
+.modalField input:focus {
+  border-color: #818cf8;
+}
+
+.modalSubmitBtn {
+  flex: 1;
+  padding: 11px;
+  background: linear-gradient(135deg, #818cf8, #6366f1);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.modalSubmitBtn:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.modalSubmitBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.modalCancelBtn {
+  padding: 11px 20px;
+  background: none;
+  border: 1px solid #27272a;
+  color: #a1a1aa;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.modalCancelBtn:hover {
+  border-color: #3f3f46;
+  color: #fafafa;
+}
+
 @media (max-width: 768px) {
-  .section { padding: 80px 20px; }
-  .title { font-size: 36px; }
-  .grid { grid-template-columns: 1fr; }
+  .section {
+    padding: 80px 20px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,5 +1,28 @@
+/* Basic reset and box sizing */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+/* 
+ * Making the scrollbar look sleek and modern to fit the dark theme.
+ * No more default browser bars!
+ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #09090b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #27272a;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #3f3f46;
 }

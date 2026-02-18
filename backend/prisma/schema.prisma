@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Users ──────────────────────────────────────────────
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  name       String
+  avatarUrl  String?
+  provider   String   // "google" | "github"
+  providerId String   // ID from the OAuth provider
+  college    String?
+  skills     String[] // e.g. ["React", "Python"]
+  year       String?  // e.g. "2nd Year"
+  bio        String?  // New: Bio for profile
+  githubUrl  String?  // New: GitHub profile link
+  portfolio  Json?    // New: JSON object for external links/portfolio items
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects       Project[]
+  applications   Application[]
+  threads        ThreadMember[]
+  createdThreads Thread[]      @relation("ThreadCreator")
+  messages       ProjectMessage[]
+  notifications  Notification[]
+  assignedTasks  ProjectTask[] // New: Tasks assigned to user
+
+  @@unique([provider, providerId])
+}
+
+// ─── Campus Threads ─────────────────────────────────────
+
+model Thread {
+  id          String   @id @default(cuid())
+  slug        String   @unique // e.g. "iitb", "stanford"
+  name        String           // e.g. "IIT Bombay"
+  description String?
+  creatorId   String?          // null for seeded threads
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  creator  User?          @relation("ThreadCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  projects Project[]
+  members  ThreadMember[]
+}
+
+model ThreadMember {
+  id       String   @id @default(cuid())
+  userId   String
+  threadId String
+
+  joinedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  thread Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, threadId])
+}
+
+// ─── Projects ───────────────────────────────────────────
+
+model Project {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  skills        String[] 
+  dept          String?
+  year          String?
+  githubUrl     String?
+  
+  // Project Dashboard Data
+  goal          String?  @db.Text
+  executionPlan String?  @db.Text
+  resources     String?  @db.Text
+  files         Json?    // [{ name, url, type, uploadedAt }]
+
+  // Showcase & Discovery
+  isShowcase    Boolean  @default(false)
+  likes         Int      @default(0)
+  tags          String[] // For advanced filtering
+
+  threadId      String
+  authorId      String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  author       User             @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  thread       Thread           @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  applications Application[]
+  messages     ProjectMessage[]
+  tasks        ProjectTask[]    // New: Kanban tasks
+}
+
+// ─── Kanban Tasks (New) ─────────────────────────────────
+
+model ProjectTask {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  status      String   @default("todo") // todo, in-progress, done
+  priority    String   @default("medium") // low, medium, high
+  dueDate     DateTime?
+  
+  projectId   String
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  assigneeId  String?
+  assignee    User?    @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ─── Applications (Join Requests) ───────────────────────
+
+model Application {
+  id        String   @id @default(cuid())
+  message   String?
+  status    String   @default("pending") // pending, accepted, rejected
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projectId String
+  userId    String
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, projectId])
+}
+
+// ─── Project Chat ───────────────────────────────────────
+
+model ProjectMessage {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+
+  projectId String
+  senderId  String
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  sender  User    @relation(fields: [senderId], references: [id], onDelete: Cascade)
+}
+
+// ─── Notifications ─────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // info, success, warning, error
+  message   String
+  link      String?  // URL to redirect to
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

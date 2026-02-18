@@ -1,0 +1,581 @@
+.section {
+    min-height: calc(100vh - 80px);
+    padding: 60px 20px;
+    background: #18181b;
+}
+
+.container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* Profile Header */
+.profileHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 32px;
+}
+
+.avatarSection {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #27272a;
+}
+
+.avatarPlaceholder {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.userName {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fafafa;
+    margin: 0;
+}
+
+.userEmail {
+    font-size: 14px;
+    color: #71717a;
+    margin: 0;
+}
+
+.metaTags {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+}
+
+.metaTag {
+    font-size: 12px;
+    color: #a1a1aa;
+    background: #18181b;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid #27272a;
+}
+
+.headerActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.editBtn {
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    color: #a5b4fc;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.editBtn:hover {
+    background: rgba(129, 140, 248, 0.15);
+    border-color: #818cf8;
+}
+
+.logoutBtn {
+    background: none;
+    border: 1px solid #3f3f46;
+    color: #a1a1aa;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.logoutBtn:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+
+/* Edit Section */
+.editSection {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.editGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.editField {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 14px;
+}
+
+.editField label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #a1a1aa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.editField input,
+.editField select,
+.editField textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: #09090b;
+    border: 1px solid #27272a;
+    border-radius: 8px;
+    color: #fafafa;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.editField input:focus,
+.editField select:focus,
+.editField textarea:focus {
+    border-color: #818cf8;
+}
+
+.editField textarea {
+    resize: none;
+}
+
+.saveBtn {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.saveBtn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.saveBtn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Bio */
+.bioSection {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.bioSection p {
+    color: #d4d4d8;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Skills */
+.skillsSection {
+    margin-bottom: 32px;
+}
+
+.sectionLabel {
+    font-size: 12px;
+    font-weight: 600;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+}
+
+.skillsList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.skillPill {
+    background: rgba(129, 140, 248, 0.1);
+    border: 1px solid rgba(129, 140, 248, 0.2);
+    color: #a5b4fc;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid #27272a;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    color: #71717a;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+}
+
+.tab:hover {
+    color: #d4d4d8;
+}
+
+.activeTab {
+    color: #818cf8;
+    border-bottom-color: #818cf8;
+}
+
+/* Tab Content */
+.tabContent {
+    min-height: 200px;
+}
+
+.listItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+}
+
+.listItem:hover {
+    border-color: #3f3f46;
+}
+
+.threadSlug {
+    font-weight: 700;
+    color: #818cf8;
+    margin-right: 12px;
+    font-size: 15px;
+}
+
+.threadName {
+    color: #a1a1aa;
+    font-size: 14px;
+}
+
+.projectTitle {
+    font-weight: 600;
+    color: #fafafa;
+    font-size: 15px;
+    display: block;
+}
+
+.projectMeta {
+    color: #71717a;
+    font-size: 13px;
+    margin-top: 2px;
+    display: block;
+}
+
+.statusBadge {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: capitalize;
+}
+
+.status_pending {
+    background: rgba(234, 179, 8, 0.1);
+    color: #facc15;
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.status_accepted {
+    background: rgba(34, 197, 94, 0.1);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.2);
+}
+
+.status_rejected {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* Action buttons */
+.actionBtn {
+    background: none;
+    border: 1px solid #27272a;
+    color: #71717a;
+    padding: 5px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.actionBtn:hover {
+    border-color: #ef4444;
+    color: #f87171;
+}
+
+.deleteBtn {
+    color: #71717a;
+}
+
+.deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: #ef4444;
+    color: #f87171;
+}
+
+.emptyState {
+    text-align: center;
+    color: #52525b;
+    font-size: 15px;
+    padding: 40px 0;
+}
+
+/* Applications Modal */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modalCard {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 16px;
+    padding: 24px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modalTitle {
+    font-size: 18px;
+    color: #fafafa;
+    margin: 0;
+}
+
+.modalClose {
+    background: none;
+    border: none;
+    color: #71717a;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+}
+
+.modalBody {
+    overflow-y: auto;
+    flex: 1;
+}
+
+.applicantItem {
+    background: #09090b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+}
+
+.applicantHeader {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.applicantInfo h4 {
+    margin: 0;
+    color: #fafafa;
+    font-size: 15px;
+}
+
+.applicantMeta {
+    color: #71717a;
+    font-size: 12px;
+    margin: 2px 0 0;
+}
+
+.applicantMessage {
+    background: #18181b;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #d4d4d8;
+    margin-bottom: 12px;
+    font-style: italic;
+}
+
+.applicantActions {
+    display: flex;
+    gap: 8px;
+}
+
+.approveBtn {
+    flex: 1;
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.approveBtn:hover {
+    background: rgba(34, 197, 94, 0.2);
+}
+
+.rejectBtn {
+    flex: 1;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.rejectBtn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.statusLabel {
+    display: block;
+    text-align: center;
+    width: 100%;
+    padding: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+/* Danger Zone */
+.dangerZone {
+    margin-top: 48px;
+    padding: 24px;
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 12px;
+    background: rgba(239, 68, 68, 0.03);
+}
+
+.dangerTitle {
+    font-size: 14px;
+    font-weight: 700;
+    color: #ef4444;
+    margin: 0 0 6px;
+}
+
+.dangerDesc {
+    font-size: 13px;
+    color: #71717a;
+    margin: 0 0 16px;
+}
+
+.dangerBtn {
+    background: none;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 8px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.dangerBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+}
+
+@media (max-width: 600px) {
+    .profileHeader {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .headerActions {
+        width: 100%;
+    }
+
+    .editGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        overflow-x: auto;
+    }
+}

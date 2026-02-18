@@ -1,0 +1,127 @@
+/* ── Shared Animations ───────────────────────────────────── */
+
+/* Fade-in from below */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fade-in scale */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Skeleton shimmer */
+@keyframes shimmer {
+    0% {
+        background-position: -400px 0;
+    }
+
+    100% {
+        background-position: 400px 0;
+    }
+}
+
+/* Spinner */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ── Utility Classes ─────────────────────────────────────── */
+
+.fadeInUp {
+    animation: fadeInUp 0.4s ease-out both;
+}
+
+.fadeInScale {
+    animation: fadeInScale 0.3s ease-out both;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #1e1e22 25%, #27272a 50%, #1e1e22 75%);
+    background-size: 800px 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #3f3f46;
+    border-top-color: #818cf8;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: inline-block;
+}
+
+/* Staggered children */
+.stagger>*:nth-child(1) {
+    animation-delay: 0ms;
+}
+
+.stagger>*:nth-child(2) {
+    animation-delay: 40ms;
+}
+
+.stagger>*:nth-child(3) {
+    animation-delay: 80ms;
+}
+
+.stagger>*:nth-child(4) {
+    animation-delay: 120ms;
+}
+
+.stagger>*:nth-child(5) {
+    animation-delay: 160ms;
+}
+
+.stagger>*:nth-child(6) {
+    animation-delay: 200ms;
+}
+
+.stagger>*:nth-child(7) {
+    animation-delay: 240ms;
+}
+
+.stagger>*:nth-child(8) {
+    animation-delay: 280ms;
+}
+
+.stagger>*:nth-child(9) {
+    animation-delay: 320ms;
+}
+
+.stagger>*:nth-child(10) {
+    animation-delay: 360ms;
+}
+
+/* Modal overlay */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInScale 0.25s ease-out;
+}

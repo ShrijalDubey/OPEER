@@ -98,19 +98,24 @@
   .section {
     padding: 60px 20px;
   }
+
   .mainTitle {
     font-size: 36px;
   }
+
   .featureTitle {
     font-size: 20px;
   }
+
   .featureDesc {
     font-size: 15px;
   }
+
   .featureList {
     padding-left: 20px;
     gap: 40px;
   }
+
   .featureItem::before {
     left: -25.5px;
   }

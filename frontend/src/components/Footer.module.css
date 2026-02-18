@@ -66,6 +66,11 @@
 }
 
 @media (max-width: 768px) {
-  .footer { padding: 60px 20px 20px; }
-  .linksSide { gap: 40px; }
+  .footer {
+    padding: 60px 20px 20px;
+  }
+
+  .linksSide {
+    gap: 40px;
+  }
 }

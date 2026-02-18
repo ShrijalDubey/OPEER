@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
+import ApplyProjectModal from '../components/ApplyProjectModal';
 import styles from './JoinProject.module.css';
 
 const JoinProject = () => {
@@ -14,6 +15,7 @@ const JoinProject = () => {
   const [appliedIds, setAppliedIds] = useState(new Set());
   const [applyingId, setApplyingId] = useState(null);
   const [leavingSlug, setLeavingSlug] = useState(null);
+  const [applyModal, setApplyModal] = useState({ open: false, projectId: null, projectTitle: '' });
 
   // Fetch joined hubs
   const fetchHubs = async () => {
@@ -54,20 +56,26 @@ const JoinProject = () => {
       .catch(() => setLoadingProjects(false));
   }, [selectedThread]);
 
-  const handleApply = async (projectId) => {
+  const handleApplyClick = (projectId, projectTitle) => {
     if (!isLoggedIn) { toast.warn('Please login first.'); return; }
-    setApplyingId(projectId);
-    try {
-      const token = localStorage.getItem('opeer_token');
-      const res = await fetch(`/api/projects/${projectId}/apply`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ message: 'I would love to contribute to this project!' }),
-      });
-      if (res.ok) { setAppliedIds((prev) => new Set([...prev, projectId])); toast.success('Application sent!'); }
-      else { const d = await res.json(); toast.error(d.error || 'Failed to apply'); }
-    } catch { toast.error('Something went wrong'); }
-    finally { setApplyingId(null); }
+    setApplyModal({ open: true, projectId, projectTitle });
+  };
+
+  const submitApplication = async (projectId, message) => {
+    const token = localStorage.getItem('opeer_token');
+    const res = await fetch(`/api/projects/${projectId}/apply`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ message }),
+    });
+    if (res.ok) {
+      setAppliedIds((prev) => new Set([...prev, projectId]));
+      toast.success('Application sent!');
+    } else {
+      const d = await res.json();
+      toast.error(d.error || 'Failed to apply');
+      throw new Error(d.error);
+    }
   };
 
   const handleLeaveHub = async (slug) => {
@@ -290,10 +298,9 @@ const JoinProject = () => {
                   ) : (
                     <button
                       className={styles.applyBtn}
-                      onClick={() => handleApply(proj.id)}
-                      disabled={applyingId === proj.id}
+                      onClick={() => handleApplyClick(proj.id, proj.title)}
                     >
-                      {applyingId === proj.id ? <span className="spinner"></span> : 'Apply to Build'}
+                      Apply to Build
                     </button>
                   )}
                 </div>
@@ -302,6 +309,13 @@ const JoinProject = () => {
           </div>
         )}
       </div>
+      <ApplyProjectModal
+        isOpen={applyModal.open}
+        onClose={() => setApplyModal({ open: false, projectId: null, projectTitle: '' })}
+        projectId={applyModal.projectId}
+        projectTitle={applyModal.projectTitle}
+        onApply={submitApplication}
+      />
     </section>
   );
 };

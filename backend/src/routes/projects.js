@@ -337,6 +337,71 @@ router.patch('/:id/applications/:appId', requireAuth, async (req, res) => {
     }
 });
 
+// ─── Leave a project (team member removes themselves) ───
+
+router.delete('/:id/leave', requireAuth, async (req, res) => {
+    try {
+        const project = await prisma.project.findUnique({ where: { id: req.params.id } });
+        if (!project) return res.status(404).json({ error: 'Project not found' });
+        if (project.authorId === req.user.id) return res.status(400).json({ error: 'Owner cannot leave their own project' });
+
+        const application = await prisma.application.findFirst({
+            where: { projectId: project.id, userId: req.user.id, status: 'accepted' }
+        });
+        if (!application) return res.status(404).json({ error: 'You are not a member of this project' });
+
+        await prisma.application.delete({ where: { id: application.id } });
+
+        // Notify the owner
+        await prisma.notification.create({
+            data: {
+                userId: project.authorId,
+                type: 'warning',
+                message: `${req.user.name} left your project "${project.title}"`,
+                link: `/projects/${project.id}/dashboard`
+            }
+        });
+
+        res.json({ message: 'Left project successfully' });
+    } catch (err) {
+        console.error('DELETE /api/projects/:id/leave error:', err);
+        res.status(500).json({ error: 'Failed to leave project' });
+    }
+});
+
+// ─── Kick a member from project (owner only) ────────────
+
+router.delete('/:id/members/:userId', requireAuth, async (req, res) => {
+    try {
+        const project = await prisma.project.findUnique({ where: { id: req.params.id } });
+        if (!project) return res.status(404).json({ error: 'Project not found' });
+        if (project.authorId !== req.user.id) return res.status(403).json({ error: 'Only the owner can remove members' });
+        if (req.params.userId === req.user.id) return res.status(400).json({ error: 'Cannot remove yourself' });
+
+        const application = await prisma.application.findFirst({
+            where: { projectId: project.id, userId: req.params.userId, status: 'accepted' }
+        });
+        if (!application) return res.status(404).json({ error: 'Member not found' });
+
+        await prisma.application.delete({ where: { id: application.id } });
+
+        // Notify the kicked member
+        await prisma.notification.create({
+            data: {
+                userId: req.params.userId,
+                type: 'warning',
+                message: `You were removed from "${project.title}"`,
+                link: null
+            }
+        });
+
+        res.json({ message: 'Member removed successfully' });
+    } catch (err) {
+        console.error('DELETE /api/projects/:id/members/:userId error:', err);
+        res.status(500).json({ error: 'Failed to remove member' });
+    }
+});
+
 // ─── Project Dashboard (Update Info) ────────────────────
 
 router.patch('/:id', requireAuth, async (req, res) => {

@@ -135,12 +135,16 @@
   .wrapper {
     padding: 60px 24px;
   }
-  .title, .faqTitle {
+
+  .title,
+  .faqTitle {
     font-size: 28px;
   }
+
   .grid {
     margin-bottom: 60px;
   }
+
   .faqGrid {
     grid-template-columns: 1fr;
     gap: 40px;

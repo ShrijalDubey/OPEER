@@ -110,6 +110,44 @@ const ProjectDashboard = () => {
         }
     };
 
+    const handleLeaveProject = async () => {
+        const ok = await toast.confirm('Leave this project? You will lose access to the dashboard.');
+        if (!ok) return;
+        const token = localStorage.getItem('opeer_token');
+        try {
+            const res = await fetch(`/api/projects/${id}/leave`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+                toast.success('Left the project');
+                navigate('/');
+            } else {
+                const d = await res.json();
+                toast.error(d.error || 'Failed to leave project');
+            }
+        } catch { toast.error('Something went wrong'); }
+    };
+
+    const handleKickMember = async (memberId, memberName) => {
+        const ok = await toast.confirm(`Remove ${memberName} from this project?`);
+        if (!ok) return;
+        const token = localStorage.getItem('opeer_token');
+        try {
+            const res = await fetch(`/api/projects/${id}/members/${memberId}`, {
+                method: 'DELETE',
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            if (res.ok) {
+                toast.success(`${memberName} removed`);
+                fetchProjectDetails();
+            } else {
+                const d = await res.json();
+                toast.error(d.error || 'Failed to remove member');
+            }
+        } catch { toast.error('Something went wrong'); }
+    };
+
     const fetchMessages = async () => {
         const token = localStorage.getItem('opeer_token');
         try {
@@ -346,6 +384,31 @@ const ProjectDashboard = () => {
                                     <div style={{ fontSize: '15px', color: '#e4e4e7', fontWeight: '500' }}>{app.user.name}</div>
                                     <div style={{ fontSize: '12px', color: '#71717a' }}>Member</div>
                                 </div>
+                                {isOwner ? (
+                                    <button
+                                        onClick={() => handleKickMember(app.user.id, app.user.name)}
+                                        title={`Remove ${app.user.name}`}
+                                        style={{
+                                            background: 'none', border: '1px solid #27272a', color: '#71717a',
+                                            width: '30px', height: '30px', borderRadius: '8px', cursor: 'pointer',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                            fontSize: '14px', transition: 'all 0.2s', flexShrink: 0
+                                        }}
+                                        onMouseEnter={(e) => { e.target.style.borderColor = '#ef4444'; e.target.style.color = '#f87171'; e.target.style.background = 'rgba(239,68,68,0.06)'; }}
+                                        onMouseLeave={(e) => { e.target.style.borderColor = '#27272a'; e.target.style.color = '#71717a'; e.target.style.background = 'none'; }}
+                                    >✕</button>
+                                ) : app.user.id === user?.id ? (
+                                    <button
+                                        onClick={handleLeaveProject}
+                                        style={{
+                                            background: 'none', border: '1px solid #27272a', color: '#71717a',
+                                            padding: '4px 12px', borderRadius: '8px', cursor: 'pointer',
+                                            fontSize: '12px', fontWeight: '500', transition: 'all 0.2s'
+                                        }}
+                                        onMouseEnter={(e) => { e.target.style.borderColor = '#ef4444'; e.target.style.color = '#f87171'; }}
+                                        onMouseLeave={(e) => { e.target.style.borderColor = '#27272a'; e.target.style.color = '#71717a'; }}
+                                    >Leave</button>
+                                ) : null}
                             </div>
                         ))}
                     </div>

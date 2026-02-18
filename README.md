@@ -9,13 +9,13 @@ In the fragmented world of university networking, finding the right people for y
 Whether you're a developer looking for a designer, a founder looking for a co-founder, or just want to see what's building at other campuses, OPEER is your gateway to the student builder ecosystem.
 
 ![Dashboard Preview](assets/dashboard.png)
-*(Note: Please ensure `dashboard.png` is in the `assets` folder)*
+
 
 ---
 
 ## ✨ Key Features
 
-### � **Campus Hubs**
+### 🏢 **Campus Hubs**
 Connect with your local ecosystem. Join dedicated threads for your university (e.g., `/iitb`, `/stanford`, `/mit`) to find peers, events, and discussions specific to your campus.
 
 ### 🤝 **Smart Project Recruiting**

@@ -123,12 +123,7 @@ We believe in the power of open source. If you'd like to contribute:
 4. Push to the branch (`git push origin feature/amazing-feature`).
 5. Open a Pull Request.
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
 
 <p align="center">
-  Built with ❤️ by the OPEER Team
+  Built by Shrijal Dubey
 </p>

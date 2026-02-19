@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import KanbanBoard from '../components/KanbanBoard';
 import ProjectFiles from '../components/ProjectFiles';
+import MeetingList from '../components/MeetingList';
 import styles from './ProjectDashboard.module.css';
 
 const ProjectDashboard = () => {
@@ -349,8 +350,8 @@ const ProjectDashboard = () => {
                 {/* 6. Pending Requests (Owner Only) */}
                 {isOwner && pendingApps.length > 0 && (
                     <div>
-                        <h3 style={{ ...styles.sectionLabel, color: '#fbbf24' }}>
-                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24', boxShadow: '0 0 8px rgba(251,191,36,0.4)' }}></span>
+                        <h3 className={styles.sectionLabel} style={{ color: '#fbbf24' }}>
+                            <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fbbf24', boxShadow: '0 0 8px rgba(251,191,36,0.4)', display: 'inline-block' }}></span>
                             Pending Requests ({pendingApps.length})
                         </h3>
                         <div className={styles.teamList}>
@@ -474,7 +475,7 @@ const ProjectDashboard = () => {
                             style={{ borderBottomColor: activeTab === 'tasks' ? '#818cf8' : 'transparent' }}
                         >
                             <div className={`${styles.tabDot} ${activeTab === 'tasks' ? styles.tabDotActive : ''}`} style={{ background: '#818cf8' }} />
-                            Tasks (Kanban)
+                            Tasks
                         </button>
 
                         <button
@@ -484,6 +485,15 @@ const ProjectDashboard = () => {
                         >
                             <div className={`${styles.tabDot} ${activeTab === 'files' ? styles.tabDotActive : ''}`} style={{ background: 'var(--accent-danger)' }} />
                             Files
+                        </button>
+
+                        <button
+                            onClick={() => setActiveTab('meetings')}
+                            className={`${styles.tabBtn} ${activeTab === 'meetings' ? styles.tabBtnActive : ''}`}
+                            style={{ borderBottomColor: activeTab === 'meetings' ? '#fbbf24' : 'transparent' }}
+                        >
+                            <div className={`${styles.tabDot} ${activeTab === 'meetings' ? styles.tabDotActive : ''}`} style={{ background: '#fbbf24' }} />
+                            Meetings
                         </button>
                     </div>
                 </div>
@@ -555,10 +565,15 @@ const ProjectDashboard = () => {
                         <ProjectFiles project={project} onUpdate={setProject} />
                     )}
 
+                    {/* MEETINGS VIEW */}
+                    {activeTab === 'meetings' && (
+                        <MeetingList project={project} />
+                    )}
+
                 </div>
 
             </div>
-        </div>
+        </div >
     );
 };
 

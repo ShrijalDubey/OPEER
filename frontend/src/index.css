@@ -20,6 +20,8 @@
 
     /* Accents - Electric Violet/Cyan Gradient */
     --accent-primary: #6d28d9;
+    --accent-success: #22c55e;
+    --accent-error: #ef4444;
     /* Fallback */
     --accent-gradient: linear-gradient(135deg, #7c3aed 0%, #2dd4bf 100%);
     --accent-glow: 0 0 20px rgba(124, 58, 237, 0.5);

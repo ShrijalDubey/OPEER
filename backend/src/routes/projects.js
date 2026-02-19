@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import prisma from '../lib/prisma.js';
 import { requireAuth, optionalAuth } from '../middleware/auth.js';
+import * as meetingController from '../controllers/meetingController.js';
 
 const router = Router();
 
@@ -56,6 +57,12 @@ router.post('/', requireAuth, async (req, res) => {
         res.status(500).json({ error: 'Failed to create project' });
     }
 });
+
+// ─── Meeting Routes (Moved to top to prevent shadowing) ──
+
+router.post('/:id/meetings', requireAuth, meetingController.createMeeting);
+router.get('/:id/meetings', requireAuth, meetingController.getProjectMeetings);
+router.delete('/meetings/:meetingId', requireAuth, meetingController.deleteMeeting);
 
 // ─── Get all projects (public) ──────────────────────────
 // ─── Get all projects (public/personalized) ──────────────────────────
@@ -429,7 +436,7 @@ router.patch('/:id', requireAuth, async (req, res) => {
     }
 });
 
-// ─── Project Chat ───────────────────────────────────────
+// ─── Project Member & Task Routes ───────────────────────────────────────
 
 router.get('/:id/chat', requireAuth, async (req, res) => {
     try {

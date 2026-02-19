@@ -18,7 +18,7 @@ import ProjectDashboard from './pages/ProjectDashboard';
 import ExploreProjects from './pages/ExploreProjects';
 
 // Global styles
-import './App.css';
+
 import './styles/animations.css';
 
 // Wrapper to conditionally render Footer

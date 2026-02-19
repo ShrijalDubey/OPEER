@@ -37,7 +37,11 @@ const ProjectDashboard = () => {
     // When the component mounts or ID changes, let's load everything up
     useEffect(() => {
         // If they aren't logged in, kick them back to home
-        if (!loading && !isLoggedIn) { navigate('/'); return; }
+        if (!loading && !isLoggedIn) {
+            toast.warn('Please login to access this project.');
+            navigate('/', { replace: true });
+            return;
+        }
 
         // If we have an ID and a user, go get the project details
         if (isLoggedIn && id) fetchProjectDetails();

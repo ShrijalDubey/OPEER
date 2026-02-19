@@ -4,20 +4,23 @@
     grid-template-rows: 1fr;
     gap: var(--spacing-md);
     height: calc(100vh - 112px);
-    padding: var(--spacing-md);
-    background-color: var(--bg-primary);
+    padding: 20px 20px 20px 20px;
+    background-color: transparent;
+    /* Changed from var(--bg-primary) */
     box-sizing: border-box;
     overflow: hidden;
 }
 
 .card {
-    background-color: var(--bg-secondary);
+    background: var(--glass-surface);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
     border-radius: 24px;
-    border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
 }
 
 .infoPanel {
@@ -29,8 +32,10 @@
 .chatPanel {
     position: relative;
     padding: 0;
-    border: 1px solid var(--border-color);
-    background: linear-gradient(135deg, var(--bg-secondary) 0%, #0c0c0e 100%);
+    background: rgba(10, 10, 12, 0.6);
+    /* Slightly more opaque for readability */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
 }
 
 .headerSection {
@@ -45,8 +50,8 @@
 }
 
 .backBtn {
-    background-color: var(--bg-tertiary);
-    border: none;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     width: 36px;
     height: 36px;
     border-radius: 10px;
@@ -59,10 +64,16 @@
     transition: all 0.2s;
 }
 
+.backBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
 .editBtn {
-    background-color: var(--bg-tertiary);
+    background: rgba(255, 255, 255, 0.05);
     color: var(--text-secondary);
-    border: 1px solid #3f3f46;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 8px 20px;
     border-radius: 10px;
     font-size: 13px;
@@ -71,20 +82,26 @@
     transition: all 0.2s;
 }
 
+.editBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
 .editBtnActive {
-    background-color: var(--accent-primary);
+    background: var(--accent-gradient);
     color: #fff;
     border: none;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
 .projectTitle {
+    font-family: var(--font-display);
     font-size: 28px;
     font-weight: 800;
     margin: 0 0 12px 0;
     color: var(--text-primary);
     line-height: 1.2;
-    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -92,8 +109,9 @@
 }
 
 .projectDescription {
+    font-family: var(--font-body);
     font-size: 15px;
-    color: #d4d4d8;
+    color: var(--text-secondary);
     margin: 0;
     line-height: 1.7;
 }
@@ -106,21 +124,22 @@
 }
 
 .skillTag {
-    background-color: rgba(79, 70, 229, 0.1);
-    color: #818cf8;
+    background: rgba(124, 58, 237, 0.1);
+    color: #a78bfa;
     padding: 4px 12px;
     border-radius: 8px;
     font-size: 12px;
     font-weight: 600;
-    border: 1px solid rgba(79, 70, 229, 0.15);
+    border: 1px solid rgba(124, 58, 237, 0.2);
+    font-family: var(--font-body);
 }
 
 .infoBox {
-    background-color: #141416;
+    background: rgba(255, 255, 255, 0.02);
     border-radius: 16px;
     padding: 18px 20px;
     margin-bottom: 12px;
-    border: 1px solid #1e1e22;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .infoBoxLast {
@@ -132,8 +151,9 @@
 }
 
 .sectionLabel {
+    font-family: var(--font-display);
     font-size: 13px;
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -158,45 +178,47 @@
 }
 
 .ownerCard {
-    background-color: rgba(79, 70, 229, 0.06);
-    border: 1px solid rgba(79, 70, 229, 0.1);
+    background: rgba(124, 58, 237, 0.08);
+    border: 1px solid rgba(124, 58, 237, 0.15);
 }
 
 .memberCard {
-    background-color: #141416;
-    border: 1px solid #1e1e22;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .avatar {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    border: 2px solid #3f3f46;
+    border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .ownerAvatar {
-    border-color: #818cf8;
+    border-color: #a78bfa;
 }
 
 .memberName {
     font-size: 15px;
     color: var(--text-primary);
     font-weight: 600;
+    font-family: var(--font-display);
 }
 
 .memberRole {
     font-size: 12px;
     color: var(--text-muted);
+    font-family: var(--font-body);
 }
 
 .ownerRole {
-    color: #818cf8;
+    color: #a78bfa;
     font-weight: 500;
 }
 
 .removeBtn {
     background: none;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-muted);
     width: 30px;
     height: 30px;
@@ -211,14 +233,14 @@
 }
 
 .removeBtn:hover {
-    border-color: var(--accent-danger);
+    border-color: #f87171;
     color: #f87171;
-    background-color: rgba(239, 68, 68, 0.06);
+    background: rgba(239, 68, 68, 0.1);
 }
 
 .leaveBtn {
     background: none;
-    border: 1px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--text-muted);
     padding: 4px 12px;
     border-radius: 8px;
@@ -229,17 +251,19 @@
 }
 
 .leaveBtn:hover {
-    border-color: var(--accent-danger);
+    border-color: #f87171;
     color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
 }
 
+/* Chat Section */
 .chatHeader {
     padding: 0 24px;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    background-color: rgba(24, 24, 27, 0.8);
-    backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(10px);
     position: absolute;
     top: 0;
     left: 0;
@@ -267,26 +291,35 @@
     align-items: center;
     gap: 8px;
     height: 100%;
+    transition: all 0.2s;
+    font-family: var(--font-display);
 }
 
 .tabBtnActive {
     color: var(--text-primary);
+    border-bottom-color: #a78bfa;
+}
+
+.tabBtn:hover:not(.tabBtnActive) {
+    color: var(--text-secondary);
 }
 
 .tabDot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    opacity: 0.5;
+    opacity: 0.3;
+    background-color: currentColor;
 }
 
 .tabDotActive {
     opacity: 1;
+    box-shadow: 0 0 8px currentColor;
 }
 
 .msgCount {
     font-size: 10px;
-    background-color: var(--bg-tertiary);
+    background: rgba(255, 255, 255, 0.1);
     padding: 2px 6px;
     border-radius: 10px;
     color: var(--text-secondary);
@@ -305,7 +338,7 @@
     padding: 80px 24px 100px 24px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 12px;
 }
 
 .chatSpacer {
@@ -313,7 +346,7 @@
 }
 
 .messageWrapper {
-    max-width: 65%;
+    max-width: 70%;
     display: flex;
     flex-direction: column;
 }
@@ -329,7 +362,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    border: 2px solid var(--border-color);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .msgSender {
@@ -345,21 +378,23 @@
 
 .msgBubble {
     padding: 12px 18px;
-    border-radius: 4px 20px 20px 20px;
+    border-radius: 12px 12px 12px 0;
     font-size: 14px;
     line-height: 1.5;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-family: var(--font-body);
 }
 
 .msgBubbleMe {
-    background-color: var(--accent-primary);
+    background: var(--accent-gradient);
     color: #fff;
-    border-radius: 20px 4px 20px 20px;
+    border-radius: 12px 12px 0 12px;
 }
 
 .msgBubbleOthers {
-    background-color: var(--bg-tertiary);
+    background: rgba(255, 255, 255, 0.05);
     color: #e4e4e7;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .inputArea {
@@ -370,13 +405,14 @@
 }
 
 .inputForm {
-    background-color: var(--bg-tertiary);
+    background: rgba(25, 25, 28, 0.8);
+    backdrop-filter: blur(10px);
     padding: 8px;
     border-radius: 60px;
     display: flex;
     align-items: center;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
-    border: 1px solid #3f3f46;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .chatInput {
@@ -387,15 +423,16 @@
     color: #fff;
     font-size: 14px;
     outline: none;
+    font-family: var(--font-body);
 }
 
 .sendBtn {
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background-color: #3f3f46;
+    background: rgba(255, 255, 255, 0.1);
     border: none;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -404,10 +441,18 @@
 }
 
 .sendBtnActive {
-    background-color: var(--accent-primary);
+    background: var(--accent-gradient);
+    color: #fff;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
 
+.sendBtnActive:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.5);
+}
+
+/* Edit Mode Inputs */
 .inputField {
     display: flex;
     flex-direction: column;
@@ -422,26 +467,28 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.8px;
+    font-family: var(--font-display);
 }
 
 .textArea,
 .textInput {
     width: 100%;
     padding: 12px 14px;
-    background-color: var(--bg-primary);
-    border: 1px solid #3f3f46;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: var(--text-primary);
     font-size: 14px;
     outline: none;
-    font-family: inherit;
+    font-family: var(--font-body);
     box-sizing: border-box;
     transition: border-color 0.2s;
 }
 
 .textArea:focus,
 .textInput:focus {
-    border-color: var(--accent-primary);
+    border-color: #a78bfa;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 .textArea {
@@ -459,6 +506,7 @@
 
 .placeholderText {
     color: var(--text-muted);
+    font-style: italic;
 }
 
 @media (max-width: 1024px) {
@@ -467,14 +515,17 @@
         grid-template-rows: auto 1fr;
         height: auto;
         overflow-y: auto;
+        padding-top: 80px;
     }
 
     .card {
         height: 600px;
+        border-radius: 20px;
     }
 
     .infoPanel {
         height: auto;
         overflow: visible;
+        margin-bottom: 20px;
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import styles from './Testimonials.module.css';
 
 const Testimonials = () => {
@@ -45,16 +46,53 @@ const Testimonials = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 30, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 50,
+        damping: 15
+      }
+    }
+  };
+
   return (
     <section className={styles.wrapper}>
       {/* Testimonials Part */}
       <div className={styles.header}>
-        <h2 className={styles.title}>Trusted by students from <span className={styles.highlight}>Top Campuses</span></h2>
+        <motion.h2
+          className={styles.title}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          Trusted by students from <span className={styles.highlight}>Top Campuses</span>
+        </motion.h2>
       </div>
-      
-      <div className={styles.grid}>
+
+      <motion.div
+        className={styles.grid}
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+      >
         {reviews.map((rev, i) => (
-          <div key={i} className={styles.card}>
+          <motion.div key={i} className={styles.card} variants={itemVariants}>
             <div className={styles.userSection}>
               <div className={styles.avatar}>{rev.avatar}</div>
               <div className={styles.userInfo}>
@@ -63,21 +101,35 @@ const Testimonials = () => {
               </div>
             </div>
             <p className={styles.reviewText}>"{rev.text}"</p>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* FAQ Part */}
       <div className={styles.faqSection}>
-        <h2 className={styles.faqTitle}>Common Questions</h2>
-        <div className={styles.faqGrid}>
+        <motion.h2
+          className={styles.faqTitle}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          Common Questions
+        </motion.h2>
+        <motion.div
+          className={styles.faqGrid}
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {faqs.map((item, index) => (
-            <div key={index} className={styles.questionBox}>
+            <motion.div key={index} className={styles.questionBox} variants={itemVariants}>
               <h4 className={styles.question}>{item.q}</h4>
               <p className={styles.answer}>{item.a}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

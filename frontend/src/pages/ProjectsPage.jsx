@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useToast } from '../components/Toast';
 import styles from './ProjectsPage.module.css';
 
 const ProjectsPage = () => {
@@ -11,10 +12,16 @@ const ProjectsPage = () => {
     const [projects, setProjects] = useState({ owned: [], joined: [] });
     const [fetching, setFetching] = useState(true);
 
+    const toast = useToast();
+
     // When the page loads, let's grab the data
     useEffect(() => {
         // Safety check: if not logged in, back to home you go
-        if (!loading && !isLoggedIn) { navigate('/'); return; }
+        if (!loading && !isLoggedIn) {
+            toast.warn('Please login to view your projects.');
+            navigate('/', { replace: true });
+            return;
+        }
 
         if (isLoggedIn) {
             const token = localStorage.getItem('opeer_token');

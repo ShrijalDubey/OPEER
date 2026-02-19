@@ -21,13 +21,16 @@ const UploadProject = () => {
     github: '',
   });
 
+  const hasWarnedRef = React.useRef(false);
+
   // Redirect if not logged in
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (!loading && !isLoggedIn && !hasWarnedRef.current) {
+      hasWarnedRef.current = true;
       toast.warn('Please login first to upload a project.');
       navigate('/', { replace: true });
     }
-  }, [loading, isLoggedIn, navigate]);
+  }, [loading, isLoggedIn, navigate, toast]);
 
   // Fetch only user's joined threads for the dropdown
   useEffect(() => {

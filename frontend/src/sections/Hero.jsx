@@ -1,19 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import styles from './Hero.module.css';
 
 const Hero = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  
-  const scrollToFeatures = () => {
-    const featuresSection = document.getElementById('features');
-    if (featuresSection) {
-      featuresSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
-  // 1. Function to handle navigation to the Join page
   const handleFindThread = () => {
     if (searchTerm.trim()) {
       navigate('/join-thread', { state: { query: searchTerm } });
@@ -22,7 +15,6 @@ const Hero = () => {
     }
   };
 
-  // 2. Function to listen for Enter key
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       handleFindThread();
@@ -30,71 +22,79 @@ const Hero = () => {
   };
 
   return (
-    <section className={styles.heroContainer}>
-      <div className={styles.backgroundEffect}></div>
-      
-      <div className={styles.content}>
-        <div className={styles.badge}>
-          <span>🚀 Join 500+ campus hubs</span>
-        </div>
+    <section className={styles.heroSection}>
 
-        <h1 className={styles.title}>
-          The Place Where <br />
-          <span className={styles.highlight}>Students Build Together</span>
-        </h1>
-        
-        <p className={styles.subtitle}>
-          Stop building in isolation. Join your college thread to find collaborators 
-          for personal projects, startups, research, or competitions. 
-          Your campus network is your greatest resource—use it.
-        </p>
+      {/* Background Decor */}
+      <div className={styles.gridBackground}></div>
+      <div className={styles.spotlight}></div>
 
-        <div className={styles.actionArea}>
-          <div className={styles.searchWrapper}>
-            <span className={styles.slash}>/</span>
-            <input 
-              type="text" 
-              placeholder="Enter your college (e.g. iitb, mit)" 
-              className={styles.searchInput}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              onKeyDown={handleKeyDown} // Trigger on Enter
-            />
-            <button 
-              className={styles.joinButton} 
-              onClick={handleFindThread} // Trigger on Click
-            >
-              Find My Thread
-            </button>
-          </div>
-          
-          <div className={styles.secondaryActions}>
-            <button 
-              className={styles.getStartedButton}
-              onClick={scrollToFeatures}
-            >
-              Getting Started
-            </button>
-          </div>
-        </div>
+      {/* Static Prism Wrapper (No Tilt) */}
+      <div className={styles.prismWrapper}>
+        <motion.div
+          className={styles.prismCard}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          {/* Decorative Corner Accents */}
+          <div className={`${styles.corner} ${styles.tl}`}></div>
+          <div className={`${styles.corner} ${styles.tr}`}></div>
+          <div className={`${styles.corner} ${styles.bl}`}></div>
+          <div className={`${styles.corner} ${styles.br}`}></div>
 
-        <div className={styles.stats}>
-          <div className={styles.statItem}>
-            <strong>500+</strong>
-            <span>Active Campuses</span>
+          <div className={styles.contentInner}>
+            <div className={styles.tagline}>
+              <span className={styles.pulseDot}></span>
+              The Student Builder Network
+            </div>
+
+            <h1 className={styles.prismTitle}>
+              Connect with the Best <br />
+              <span className={styles.gradientText}>Builders on your Campus.</span>
+            </h1>
+
+            <div className={styles.searchBlock}>
+              <div className={styles.inputContainer}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input
+                  type="text"
+                  placeholder="Find your college thread..."
+                  className={styles.prismInput}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                />
+              </div>
+              <button className={styles.actionBtn} onClick={handleFindThread}>
+                Join Now <span className={styles.arrow}>→</span>
+              </button>
+            </div>
+
+            <div className={styles.statsRow}>
+              <div className={styles.statItem}>
+                <strong>500+</strong>
+                <span>Universities</span>
+              </div>
+              <div className={styles.divider}></div>
+              <div className={styles.statItem}>
+                <strong>10k+</strong>
+                <span>Projects</span>
+              </div>
+              <div className={styles.divider}></div>
+              <div className={styles.statItem}>
+                <strong>Free</strong>
+                <span>For Students</span>
+              </div>
+            </div>
+
           </div>
-          <div className={styles.statDivider}></div>
-          <div className={styles.statItem}>
-            <strong>10k+</strong>
-            <span>Student Builders</span>
-          </div>
-          <div className={styles.statDivider}></div>
-          <div className={styles.statItem}>
-            <strong>3k+</strong>
-            <span>Projects Launched</span>
-          </div>
-        </div>
+        </motion.div>
       </div>
+
     </section>
   );
 };

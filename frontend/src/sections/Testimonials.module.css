@@ -1,71 +1,80 @@
 .wrapper {
-  padding: 80px 74px;
-  background-color: #121214;
-  border-top: 1px solid #1e1e21;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  padding: 120px 24px;
+  position: relative;
+  /* Transparent background */
 }
 
 .header {
   text-align: center;
-  margin-bottom: 50px;
+  margin-bottom: 80px;
 }
 
 .title {
-  color: #ffffff;
-  font-size: 32px;
+  font-family: var(--font-display);
+  color: var(--text-primary);
+  font-size: 48px;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -2px;
+  margin-bottom: 16px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .highlight {
-  background: linear-gradient(90deg, #818cf8, #c084fc);
+  background: var(--accent-gradient);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 24px;
-  max-width: 1000px;
-  margin: 0 auto 100px auto;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto 140px auto;
 }
 
 .card {
-  background: #18181b;
-  border: 1px solid #27272a;
-  border-radius: 16px;
-  padding: 28px;
-  transition: transform 0.2s ease, border-color 0.2s;
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  transition: all 0.4s ease;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 .card:hover {
-  transform: translateY(-5px);
-  border-color: #818cf8;
+  transform: translateY(-8px);
+  border-color: rgba(124, 58, 237, 0.3);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .userSection {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .avatar {
-  width: 42px;
-  height: 42px;
-  background: linear-gradient(135deg, #27272a, #3f3f46);
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.1));
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   font-weight: 600;
-  font-size: 14px;
-  border: 1px solid #3f3f46;
+  font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .userInfo {
@@ -74,79 +83,96 @@
 }
 
 .userInfo strong {
-  color: #ffffff;
-  font-size: 15px;
+  color: var(--text-primary);
+  font-size: 16px;
   font-weight: 600;
+  font-family: var(--font-display);
 }
 
 .userInfo span {
-  color: #71717a;
+  color: var(--text-secondary);
   font-size: 13px;
 }
 
 .reviewText {
-  color: #d4d4d8;
-  font-size: 15px;
-  line-height: 1.6;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.7;
   font-style: italic;
+  font-family: var(--font-body);
 }
 
 
 .faqSection {
-  border-top: 1px solid #27272a;
-  padding-top: 80px;
-  max-width: 900px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
 .faqTitle {
-  font-size: 36px;
+  font-family: var(--font-display);
+  font-size: 42px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   text-align: center;
-  margin-bottom: 60px;
-  letter-spacing: -1px;
+  margin-bottom: 80px;
+  letter-spacing: -2px;
 }
 
 .faqGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 50px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
 }
 
 .questionBox {
-  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 32px;
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+
+.questionBox:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .question {
-  font-size: 18px;
+  font-family: var(--font-display);
+  font-size: 20px;
   font-weight: 600;
-  color: #f4f4f5;
-  margin-bottom: 10px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
 }
 
 .answer {
+  font-family: var(--font-body);
   font-size: 16px;
-  color: #a1a1aa;
-  line-height: 1.6;
+  color: var(--text-secondary);
+  line-height: 1.7;
 }
 
 @media (max-width: 768px) {
   .wrapper {
-    padding: 60px 24px;
+    padding: 80px 20px;
   }
 
   .title,
   .faqTitle {
-    font-size: 28px;
+    font-size: 32px;
   }
 
   .grid {
-    margin-bottom: 60px;
+    margin-bottom: 80px;
+    grid-template-columns: 1fr;
   }
 
   .faqGrid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 24px;
+  }
+
+  .questionBox {
+    padding: 24px;
   }
 }

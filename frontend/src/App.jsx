@@ -5,6 +5,7 @@ import { ToastProvider } from './components/Toast';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProfileSetupModal from './components/ProfileSetupModal';
+import AnimatedBackground from './components/AnimatedBackground';
 
 // Pages
 import Home from './pages/Home';
@@ -37,6 +38,7 @@ function App() {
       <AuthProvider>
         <ToastProvider>
           <div className="app-container">
+            <AnimatedBackground />
             <Navbar />
 
             {/* Blocking modal — renders if logged in but profile incomplete */}

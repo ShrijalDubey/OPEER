@@ -1,175 +1,261 @@
-.heroContainer {
-  position: relative;
+.heroSection {
+  min-height: 100vh;
   width: 100%;
-  min-height: calc(100vh - 110px);
-  background-color: #121214;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 60px 24px;
   overflow: hidden;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.backgroundEffect {
-  position: absolute;
-  top: -20%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80vw;
-  height: 80vw;
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.1) 0%, rgba(18, 18, 20, 0) 70%);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.content {
   position: relative;
-  z-index: 1;
-  max-width: 900px;
-  text-align: center;
+  perspective: 1500px;
+  padding-bottom: 200px;
+  /* Lifted up significantly */
+}
+
+/* --- Background Effects (Preserved) --- */
+.gridBackground {
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(500px) rotateX(60deg);
+  animation: gridMove 25s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gridMove {
+  from {
+    transform: perspective(500px) rotateX(60deg) translateY(0);
+  }
+
+  to {
+    transform: perspective(500px) rotateX(60deg) translateY(50px);
+  }
+}
+
+.spotlight {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(124, 58, 237, 0.1) 0%, transparent 70%);
+  transform: translateX(-50%);
+  filter: blur(100px);
+  pointer-events: none;
+}
+
+/* --- The Prism Card --- */
+.prismWrapper {
+  transform-style: preserve-3d;
+  width: 100%;
+  max-width: 1100px;
+  /* Bigger width */
+  padding: 24px;
+}
+
+.prismCard {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(40px);
+  /* Heavy blur for "crystal" look */
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  /* Faint border */
+  border-radius: 48px;
+  padding: 80px;
+  /* Bigger padding */
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 40px 100px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Corner Accents */
+.corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tl {
+  top: 20px;
+  left: 20px;
+  border-right: none;
+  border-bottom: none;
+  border-radius: 8px 0 0 0;
+}
+
+.tr {
+  top: 20px;
+  right: 20px;
+  border-left: none;
+  border-bottom: none;
+  border-radius: 0 8px 0 0;
+}
+
+.bl {
+  bottom: 20px;
+  left: 20px;
+  border-right: none;
+  border-top: none;
+  border-radius: 0 0 0 8px;
+}
+
+.br {
+  bottom: 20px;
+  right: 20px;
+  border-left: none;
+  border-top: none;
+  border-radius: 0 0 8px 0;
+}
+
+.prismCard:hover .corner {
+  border-color: #818cf8;
+  width: 30px;
+  height: 30px;
+}
+
+/* Content */
+.contentInner {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 10;
 }
 
-.badge {
-  background-color: #18181b;
-  border: 1px solid #27272a;
+.tagline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: #a78bfa;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 24px;
+  background: rgba(124, 58, 237, 0.1);
   padding: 6px 16px;
   border-radius: 20px;
-  margin-bottom: 24px;
+  border: 1px solid rgba(124, 58, 237, 0.2);
 }
 
-.badge span {
-  color: #a1a1aa;
-  font-size: 13px;
-  font-weight: 500;
+.pulseDot {
+  width: 6px;
+  height: 6px;
+  background: #a78bfa;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #a78bfa;
 }
 
-.title {
-  color: #ffffff;
+.prismTitle {
+  font-family: var(--font-display);
   font-size: 64px;
-  line-height: 1.1;
   font-weight: 800;
-  margin: 0 0 24px 0;
-  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: #fff;
+  margin-bottom: 48px;
+  letter-spacing: -1px;
 }
 
-.highlight {
-  background: linear-gradient(90deg, #818cf8 0%, #c084fc 100%);
+.hollowText {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.5);
+}
+
+.gradientText {
+  background: var(--accent-gradient);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
-.subtitle {
-  color: #a1a1aa;
-  font-size: 20px;
-  line-height: 1.6;
-  max-width: 650px;
-  margin: 0 0 48px 0;
-}
-
-.actionArea {
+/* Search Block */
+.searchBlock {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 8px;
   width: 100%;
-  max-width: 500px;
-  margin-bottom: 60px;
+  max-width: 580px;
+  margin-bottom: 56px;
+  transition: all 0.3s;
 }
 
-.searchWrapper {
-  display: flex;
-  align-items: center;
-  background-color: #18181b;
-  border: 1px solid #3f3f46;
-  border-radius: 12px;
-  padding: 6px;
-  width: 100%;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.searchWrapper:focus-within {
+.searchBlock:focus-within {
+  background: rgba(255, 255, 255, 0.08);
   border-color: #818cf8;
-  box-shadow: 0 0 0 1px rgba(129, 140, 248, 0.2);
+  box-shadow: 0 0 30px rgba(129, 140, 248, 0.15);
+  transform: translateY(-2px);
 }
 
-.slash {
-  color: #818cf8;
-  font-size: 20px;
-  font-weight: 700;
+.inputContainer {
+  flex: 1;
+  display: flex;
+  align-items: center;
   padding-left: 16px;
-  padding-right: 4px;
+  gap: 12px;
 }
 
-.searchInput {
+.prismInput {
   flex: 1;
   background: transparent;
   border: none;
-  color: #ffffff;
   font-size: 16px;
-  padding: 12px 8px;
+  color: #fff;
   outline: none;
+  font-family: var(--font-body);
 }
 
-.searchInput::placeholder {
-  color: #52525b;
+.prismInput::placeholder {
+  color: rgba(255, 255, 255, 0.3);
 }
 
-.joinButton {
-  background-color: #ffffff;
-  color: #121214;
+.actionBtn {
+  background: #fff;
+  color: #000;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   padding: 12px 24px;
-  font-size: 15px;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.1s;
-}
-
-.joinButton:hover {
-  background-color: #e4e4e7;
-}
-
-.joinButton:active {
-  transform: scale(0.98);
-}
-
-.secondaryActions {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-}
-
-.getStartedButton {
-  background: transparent;
-  color: #a1a1aa;
-  border: 1px solid #27272a;
-  border-radius: 8px;
-  padding: 10px 24px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.getStartedButton:hover {
-  background-color: #18181b;
-  color: #ffffff;
-  border-color: #3f3f46;
-}
-
-.stats {
   display: flex;
   align-items: center;
-  gap: 32px;
-  padding-top: 40px;
-  border-top: 1px solid #27272a;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.actionBtn:hover {
+  background: #a78bfa;
+  transform: scale(1.02);
+}
+
+.arrow {
+  transition: transform 0.2s;
+}
+
+.actionBtn:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* Stats Row */
+.statsRow {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  width: 100%;
+  justify-content: center;
 }
 
 .statItem {
@@ -180,65 +266,50 @@
 }
 
 .statItem strong {
-  color: #ffffff;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
+  color: #fff;
 }
 
 .statItem span {
-  color: #71717a;
-  font-size: 14px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.statDivider {
+.divider {
   width: 1px;
   height: 30px;
-  background-color: #27272a;
+  background: rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive Adjustments */
 @media (max-width: 768px) {
-  .heroContainer {
-    padding: 40px 20px;
+  .prismCard {
+    padding: 32px 20px;
   }
 
-  .title {
-    font-size: 42px;
+  .prismTitle {
+    font-size: 40px;
   }
 
-  .subtitle {
-    font-size: 17px;
-    margin-bottom: 32px;
-  }
-
-  .searchWrapper {
+  .searchBlock {
     flex-direction: column;
     padding: 12px;
     gap: 12px;
   }
 
-  .slash {
-    display: none;
-  }
-
-  .searchInput {
+  .actionBtn {
     width: 100%;
-    text-align: center;
-    padding: 8px;
+    justify-content: center;
   }
 
-  .joinButton {
-    width: 100%;
+  .statsRow {
+    gap: 20px;
   }
 
-  .stats {
-    flex-direction: column;
-    gap: 24px;
-    border-top: none;
-    padding-top: 20px;
-  }
-
-  .statDivider {
+  .divider {
     display: none;
   }
 }

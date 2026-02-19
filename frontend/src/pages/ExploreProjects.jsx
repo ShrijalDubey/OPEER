@@ -14,11 +14,13 @@ const ExploreProjects = () => {
     const [projects, setProjects] = useState([]);
     const [fetching, setFetching] = useState(true);
     const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+    const [visibleCount, setVisibleCount] = useState(9); // Pagination
     const [applyModal, setApplyModal] = useState({ open: false, projectId: null, projectTitle: '' });
 
     useEffect(() => {
         const fetchProjects = async () => {
             setFetching(true);
+            setVisibleCount(9); // Reset pagination on new search
             try {
                 const params = new URLSearchParams();
                 if (searchTerm) params.append('search', searchTerm);
@@ -135,39 +137,59 @@ const ExploreProjects = () => {
                 {fetching ? (
                     <div style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '40px' }}>Loading...</div>
                 ) : (
-                    <div className={styles.projectsGrid}>
-                        {projects.length === 0 ? (
-                            <div className={styles.noProjects}>No projects found matching "{searchTerm}"</div>
-                        ) : (
-                            projects.map(project => (
-                                <div key={project.id} className={styles.projectCard} onClick={() => handleProjectClick(project)}>
-                                    <div className={styles.cardHeader}>
-                                        <h3 className={styles.cardTitle}>{project.title}</h3>
-                                        {project.isShowcase && <span className={styles.showcaseBadge}>SHOWCASE</span>}
-                                    </div>
-
-                                    <p className={styles.cardDescription}>
-                                        {project.description}
-                                    </p>
-
-                                    <div className={styles.skillsWrapper}>
-                                        {project.skills.slice(0, 3).map((skill, i) => (
-                                            <span key={i} className={styles.skillPill}>{skill}</span>
-                                        ))}
-                                        {project.skills.length > 3 && <span className={styles.moreSkills}>+{project.skills.length - 3}</span>}
-                                    </div>
-
-                                    <div className={styles.cardFooter}>
-                                        <div className={styles.authorInfo}>
-                                            <img src={project.author.avatarUrl || `https://ui-avatars.com/api/?name=${project.author.name}&background=random`} alt="" className={styles.authorAvatar} />
-                                            <span className={styles.authorName}>{project.author.name}</span>
+                    <>
+                        <div className={styles.projectsGrid}>
+                            {projects.length === 0 ? (
+                                <div className={styles.noProjects}>No projects found matching "{searchTerm}"</div>
+                            ) : (
+                                projects.slice(0, visibleCount).map(project => (
+                                    <div key={project.id} className={styles.projectCard} onClick={() => handleProjectClick(project)}>
+                                        <div className={styles.cardHeader}>
+                                            <h3 className={styles.cardTitle}>{project.title}</h3>
+                                            {project.isShowcase && <span className={styles.showcaseBadge}>SHOWCASE</span>}
                                         </div>
-                                        {isLoggedIn && getActionButton(project)}
+
+                                        <p className={styles.cardDescription}>
+                                            {project.description}
+                                        </p>
+
+                                        <div className={styles.skillsWrapper}>
+                                            {project.skills.slice(0, 3).map((skill, i) => (
+                                                <span key={i} className={styles.skillPill}>{skill}</span>
+                                            ))}
+                                            {project.skills.length > 3 && <span className={styles.moreSkills}>+{project.skills.length - 3}</span>}
+                                        </div>
+
+                                        <div className={styles.cardFooter}>
+                                            <div className={styles.authorInfo}>
+                                                <img src={project.author.avatarUrl || `https://ui-avatars.com/api/?name=${project.author.name}&background=random`} alt="" className={styles.authorAvatar} />
+                                                <span className={styles.authorName}>{project.author.name}</span>
+                                            </div>
+                                            {isLoggedIn && getActionButton(project)}
+                                        </div>
                                     </div>
-                                </div>
-                            ))
+                                ))
+                            )}
+                        </div>
+
+                        {!searchTerm && projects.length > visibleCount && (
+                            <div style={{ textAlign: 'center', marginTop: '40px', paddingBottom: '20px' }}>
+                                <button
+                                    onClick={() => setVisibleCount(prev => prev + 9)}
+                                    className={styles.btn}
+                                    style={{
+                                        background: 'rgba(255,255,255,0.05)',
+                                        border: '1px solid rgba(255,255,255,0.1)',
+                                        color: 'var(--text-secondary)',
+                                        padding: '12px 24px',
+                                        minWidth: '200px'
+                                    }}
+                                >
+                                    Show More Projects
+                                </button>
+                            </div>
                         )}
-                    </div>
+                    </>
                 )}
             </div>
 

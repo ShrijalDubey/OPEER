@@ -9,7 +9,30 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 24px;
+    margin-bottom: 4px;
+    /* Reduced from 8px for compact look */
+}
+
+/* Past meeting state */
+.past {
+    filter: grayscale(100%);
+    opacity: 0.6;
+    pointer-events: none;
+    /* Optional: prevent interactions */
+}
+
+.past button {
+    pointer-events: auto;
+    /* Allow deleting */
+}
+
+.endedBadge {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
 }
 
 .header h3 {

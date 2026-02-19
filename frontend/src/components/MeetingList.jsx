@@ -99,49 +99,61 @@ const MeetingList = ({ project }) => {
                 {meetings.length === 0 ? (
                     <div className={styles.emptyState}>No upcoming meetings.</div>
                 ) : (
-                    meetings.map(meeting => (
-                        <div key={meeting.id} className={styles.card}>
-                            <div className={styles.cardHeader}>
-                                <div className={styles.dateBadge}>
-                                    <span className={styles.month}>{new Date(meeting.startTime).toLocaleString('default', { month: 'short' })}</span>
-                                    <span className={styles.day}>{new Date(meeting.startTime).getDate()}</span>
-                                </div>
-                                <div className={styles.meta}>
-                                    <h4 className={styles.title}>{meeting.title}</h4>
-                                    <span className={styles.time}>
-                                        {new Date(meeting.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-                                </div>
-                                {(isOwner || meeting.createdById === user?.id) && (
-                                    <button
-                                        onClick={() => handleDeleteMeeting(meeting.id)}
-                                        className={styles.deleteBtn}
-                                        title="Cancel Meeting"
-                                    >×</button>
-                                )}
-                            </div>
+                    meetings.map(meeting => {
+                        // Check if meeting is 5 mins past its start time
+                        const meetingTime = new Date(meeting.startTime);
+                        const isPast = new Date() > new Date(meetingTime.getTime() + 5 * 60000);
 
-                            {meeting.purpose && (
-                                <p className={styles.purpose}>{meeting.purpose}</p>
-                            )}
-
-                            <div className={styles.footer}>
-                                <div className={styles.host}>
-                                    <img
-                                        src={meeting.createdBy?.avatarUrl || `https://ui-avatars.com/api/?name=${meeting.createdBy?.name}&background=random`}
-                                        className={styles.avatar}
-                                        alt=""
-                                    />
-                                    <span>Host: {meeting.createdBy?.name}</span>
+                        return (
+                            <div
+                                key={meeting.id}
+                                className={`${styles.card} ${isPast ? styles.past : ''}`}
+                            >
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.dateBadge}>
+                                        <span className={styles.month}>{meetingTime.toLocaleString('default', { month: 'short' })}</span>
+                                        <span className={styles.day}>{meetingTime.getDate()}</span>
+                                    </div>
+                                    <div className={styles.meta}>
+                                        <h4 className={styles.title}>{meeting.title}</h4>
+                                        <span className={styles.time}>
+                                            {meetingTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        </span>
+                                    </div>
+                                    {(isOwner || meeting.createdById === user?.id) && (
+                                        <button
+                                            onClick={() => handleDeleteMeeting(meeting.id)}
+                                            className={styles.deleteBtn}
+                                            title="Cancel Meeting"
+                                        >×</button>
+                                    )}
                                 </div>
-                                {meeting.link && (
-                                    <a href={meeting.link} target="_blank" rel="noreferrer" className={styles.joinBtn}>
-                                        Join Call →
-                                    </a>
+
+                                {meeting.purpose && (
+                                    <p className={styles.purpose}>{meeting.purpose}</p>
                                 )}
+
+                                <div className={styles.footer}>
+                                    <div className={styles.host}>
+                                        <img
+                                            src={meeting.createdBy?.avatarUrl || `https://ui-avatars.com/api/?name=${meeting.createdBy?.name}&background=random`}
+                                            className={styles.avatar}
+                                            alt=""
+                                        />
+                                        <span>Host: {meeting.createdBy?.name}</span>
+                                    </div>
+                                    {meeting.link && !isPast && (
+                                        <a href={meeting.link} target="_blank" rel="noreferrer" className={styles.joinBtn}>
+                                            Join Call →
+                                        </a>
+                                    )}
+                                    {isPast && (
+                                        <span className={styles.endedBadge}>Ended</span>
+                                    )}
+                                </div>
                             </div>
-                        </div>
-                    ))
+                        );
+                    })
                 )}
             </div>
 

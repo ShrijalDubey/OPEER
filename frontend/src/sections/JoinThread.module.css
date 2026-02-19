@@ -194,17 +194,51 @@
   transform: none;
 }
 
-.leaveBtn {
-  background: transparent;
+.actionButtons {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.viewBtn {
+  flex: 1;
+  padding: 10px;
+  background: var(--glass-surface);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viewBtn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.leaveBtn {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border-radius: 10px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
 
 .leaveBtn:hover {
-  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
-  box-shadow: none;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.leaveBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Create Card */

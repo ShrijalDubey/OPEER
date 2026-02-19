@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import ApplyProjectModal from '../components/ApplyProjectModal';
@@ -7,7 +8,8 @@ import styles from './JoinProject.module.css';
 const JoinProject = () => {
   const { user, isLoggedIn } = useAuth();
   const toast = useToast();
-  const [selectedThread, setSelectedThread] = useState(null);
+  const [searchParams] = useSearchParams();
+  const [selectedThread, setSelectedThread] = useState(searchParams.get('thread') || null);
   const [myHubs, setMyHubs] = useState([]);
   const [projects, setProjects] = useState([]);
   const [loadingHubs, setLoadingHubs] = useState(true);

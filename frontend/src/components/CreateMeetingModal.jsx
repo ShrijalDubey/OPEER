@@ -24,11 +24,18 @@ const CreateMeetingModal = ({ onClose, onSave }) => {
         });
     };
 
+    // Get current date/time for min attribute
+    const now = new Date();
+    const isoString = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+
     return (
-        <div className={styles.overlay}>
-            <div className={styles.modal}>
+        <div className={styles.overlay} onClick={onClose}>
+            <div className={styles.modal} onClick={e => e.stopPropagation()}>
                 <div className={styles.header}>
-                    <h3>Schedule Team Meeting</h3>
+                    <div className={styles.headerContent}>
+                        <h3>Schedule Team Meeting</h3>
+                        <p>Plan your next sync with the team.</p>
+                    </div>
                     <button onClick={onClose} className={styles.closeBtn}>×</button>
                 </div>
 
@@ -41,11 +48,12 @@ const CreateMeetingModal = ({ onClose, onSave }) => {
                             placeholder="e.g. Weekly Sync"
                             value={form.title}
                             onChange={e => setForm({ ...form, title: e.target.value })}
+                            autoFocus
                         />
                     </div>
 
                     <div className={styles.formGroup}>
-                        <label>Purpose</label>
+                        <label>Purpose <span className={styles.optional}>(Optional)</span></label>
                         <textarea
                             placeholder="What's this meeting about?"
                             value={form.purpose}
@@ -69,6 +77,7 @@ const CreateMeetingModal = ({ onClose, onSave }) => {
                             <input
                                 type="date"
                                 required
+                                min={new Date().toISOString().split('T')[0]}
                                 value={form.date}
                                 onChange={e => setForm({ ...form, date: e.target.value })}
                             />
@@ -86,7 +95,9 @@ const CreateMeetingModal = ({ onClose, onSave }) => {
 
                     <div className={styles.footer}>
                         <button type="button" onClick={onClose} className={styles.cancelBtn}>Cancel</button>
-                        <button type="submit" className={styles.saveBtn}>Schedule</button>
+                        <button type="submit" className={styles.saveBtn}>
+                            Schedule Meeting
+                        </button>
                     </div>
                 </form>
             </div>

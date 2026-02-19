@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
 import styles from './JoinThread.module.css';
@@ -8,6 +8,7 @@ const INITIAL_SHOW = 17;
 
 const JoinThread = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, isLoggedIn } = useAuth();
   const toast = useToast();
   const [searchTerm, setSearchTerm] = useState('');
@@ -232,13 +233,22 @@ const JoinThread = () => {
                       <p className={styles.threadDesc}>{thread.description}</p>
 
                       {isJoined ? (
-                        <button
-                          className={`${styles.joinBtn} ${styles.leaveBtn}`}
-                          onClick={() => handleLeave(thread.slug)}
-                          disabled={isBusy}
-                        >
-                          {isBusy ? <span className="spinner"></span> : '✓ Joined · Leave'}
-                        </button>
+                        <div className={styles.actionButtons}>
+                          <button
+                            className={styles.viewBtn}
+                            onClick={() => navigate(`/join-project?thread=${thread.slug}`)}
+                          >
+                            View
+                          </button>
+                          <button
+                            className={styles.leaveBtn}
+                            onClick={() => handleLeave(thread.slug)}
+                            disabled={isBusy}
+                            title="Leave Thread"
+                          >
+                            {isBusy ? <span className="spinner"></span> : 'Leave'}
+                          </button>
+                        </div>
                       ) : (
                         <button
                           className={styles.joinBtn}

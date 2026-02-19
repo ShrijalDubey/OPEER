@@ -114,6 +114,9 @@ router.post('/', requireAuth, async (req, res) => {
 
         res.status(201).json({ thread });
     } catch (err) {
+        if (err.code === 'P2002') {
+            return res.status(400).json({ error: 'A thread with this name already exists' });
+        }
         console.error('POST /api/threads error:', err);
         res.status(500).json({ error: 'Failed to create thread' });
     }

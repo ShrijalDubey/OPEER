@@ -46,7 +46,7 @@ model User {
 model Thread {
   id          String   @id @default(cuid())
   slug        String   @unique // e.g. "iitb", "stanford"
-  name        String           // e.g. "IIT Bombay"
+  name        String   @unique // e.g. "IIT Bombay"
   description String?
   creatorId   String?          // null for seeded threads
 

@@ -11,6 +11,8 @@ const ProjectsPage = () => {
     // Keeping track of all the projects here - ones you own and ones you've joined
     const [projects, setProjects] = useState({ owned: [], joined: [] });
     const [fetching, setFetching] = useState(true);
+    const [visibleOwned, setVisibleOwned] = useState(6);
+    const [visibleJoined, setVisibleJoined] = useState(6);
 
     const toast = useToast();
 
@@ -104,8 +106,11 @@ const ProjectsPage = () => {
                         <div className={styles.section}>
                             <h3 className={styles.sectionTitle}>Managed by You ({projects.owned.length})</h3>
                             <div className={styles.projectsGrid}>
-                                {projects.owned.map(p => <Card key={p.id} p={p} isOwned={true} />)}
+                                {projects.owned.slice(0, visibleOwned).map(p => <Card key={p.id} p={p} isOwned={true} />)}
                             </div>
+                            {projects.owned.length > visibleOwned && (
+                                <button onClick={() => setVisibleOwned(prev => prev + 6)} className={styles.showMoreBtn}>Show More</button>
+                            )}
                         </div>
                     )}
 
@@ -114,8 +119,11 @@ const ProjectsPage = () => {
                         <div className={styles.section}>
                             <h3 className={styles.sectionTitle}>Joined Projects ({projects.joined.length})</h3>
                             <div className={styles.projectsGrid}>
-                                {projects.joined.map(p => <Card key={p.id} p={p} isOwned={false} />)}
+                                {projects.joined.slice(0, visibleJoined).map(p => <Card key={p.id} p={p} isOwned={false} />)}
                             </div>
+                            {projects.joined.length > visibleJoined && (
+                                <button onClick={() => setVisibleJoined(prev => prev + 6)} className={styles.showMoreBtn}>Show More</button>
+                            )}
                         </div>
                     )}
 

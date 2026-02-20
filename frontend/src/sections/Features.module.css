@@ -1,6 +1,7 @@
 .section {
   padding: 120px 24px;
   position: relative;
+  scroll-margin-top: 100px;
   /* Transparent background */
 }
 

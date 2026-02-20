@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import LoginModal from './LoginModal';
@@ -12,6 +12,12 @@ const Navbar = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [activeHash, setActiveHash] = useState('');
+
+  useEffect(() => {
+    setActiveHash(location.hash);
+  }, [location]);
 
   const navItems = [
     { label: "Home", link: "/", type: "page" },
@@ -49,10 +55,12 @@ const Navbar = () => {
         const element = document.getElementById(targetId);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
+          window.history.pushState(null, '', `/#${targetId}`);
+          setActiveHash(`#${targetId}`);
         }
       } else {
         // Otherwise, go home first, wait a split second, then scroll
-        navigate('/');
+        navigate(`/#${targetId}`);
         setTimeout(() => {
           const element = document.getElementById(targetId);
           if (element) {
@@ -61,6 +69,20 @@ const Navbar = () => {
         }, 100);
       }
     }
+  };
+
+  const checkIsActive = (item) => {
+    if (item.type === "external") return false;
+
+    if (item.link === '/') {
+      return location.pathname === '/' && !activeHash;
+    }
+
+    if (item.type === "scroll") {
+      return location.pathname === '/' && activeHash === item.link.replace('/', '');
+    }
+
+    return location.pathname === item.link || location.pathname.startsWith(item.link + '/');
   };
 
   // Clicking the logo should take you to the top if you're home, or go home if you're not
@@ -125,7 +147,7 @@ const Navbar = () => {
               <li key={index}>
                 <a
                   href={item.link}
-                  className={styles.navLink}
+                  className={`${styles.navLink} ${checkIsActive(item) ? styles.active : ''}`}
                   onClick={(e) => handleNavigation(e, item)}
                 >
                   {item.label}

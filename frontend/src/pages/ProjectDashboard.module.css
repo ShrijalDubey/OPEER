@@ -529,3 +529,36 @@
         margin-bottom: 20px;
     }
 }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 80px 12px 20px;
+    }
+
+    .card {
+        height: 500px;
+    }
+
+    .infoPanel {
+        padding: 20px;
+    }
+
+    .projectTitle {
+        font-size: 24px;
+    }
+
+    .chatContainer {
+        padding: 70px 16px 80px 16px;
+    }
+
+    .msgBubble {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .inputArea {
+        bottom: 16px;
+        left: 16px;
+        right: 16px;
+    }
+}

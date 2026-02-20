@@ -202,7 +202,8 @@
   font-family: var(--font-body);
 }
 
-.navLink:hover {
+.navLink:hover,
+.navLink.active {
   color: var(--text-primary);
   background: rgba(255, 255, 255, 0.05);
 }

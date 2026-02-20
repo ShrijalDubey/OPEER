@@ -113,3 +113,26 @@ h6 {
 button {
     font-family: var(--font-body);
 }
+
+@media (max-width: 768px) {
+    :root {
+        --spacing-md: 12px;
+        --spacing-lg: 24px;
+        --spacing-xl: 48px;
+        --spacing-xxl: 80px;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 32px !important;
+    }
+
+    h2 {
+        font-size: 28px !important;
+    }
+
+    h3 {
+        font-size: 24px !important;
+    }
+}

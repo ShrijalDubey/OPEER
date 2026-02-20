@@ -76,12 +76,12 @@ const Hero = () => {
 
             <div className={styles.statsRow}>
               <div className={styles.statItem}>
-                <strong>500+</strong>
+                <strong>160+</strong>
                 <span>Universities</span>
               </div>
               <div className={styles.divider}></div>
               <div className={styles.statItem}>
-                <strong>10k+</strong>
+                <strong>1k+</strong>
                 <span>Projects</span>
               </div>
               <div className={styles.divider}></div>

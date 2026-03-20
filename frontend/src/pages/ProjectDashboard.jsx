@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSocket } from '../context/SocketContext';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../components/Toast';
@@ -12,6 +13,7 @@ const ProjectDashboard = () => {
     const navigate = useNavigate();
     const { user, isLoggedIn, loading } = useAuth();
     const toast = useToast();
+    const { socket } = useSocket();
 
     // Keeping track of project data details here
     const [project, setProject] = useState(null);
@@ -33,7 +35,6 @@ const ProjectDashboard = () => {
     const [activeTab, setActiveTab] = useState('chat'); // 'chat', 'tasks', 'files'
 
     const chatEndRef = useRef(null);
-    const pollInterval = useRef(null);
 
     // When the component mounts or ID changes, let's load everything up
     useEffect(() => {
@@ -47,11 +48,26 @@ const ProjectDashboard = () => {
         // If we have an ID and a user, go get the project details
         if (isLoggedIn && id) fetchProjectDetails();
 
-        // Start listening for new chat messages
-        startPolling();
-
-        return () => stopPolling();
+        fetchMessages();
     }, [id, isLoggedIn, loading, navigate]);
+
+    useEffect(() => {
+        if (!socket || !id) return;
+
+        // Join this project's chat room
+        socket.emit('join:project', id);
+
+        // Listen for incoming messages
+        socket.on('chat:message', (message) => {
+            setMessages(prev => [...prev, message]);
+        });
+
+        // Leave room when navigating away
+        return () => {
+            socket.emit('leave:project', id);
+            socket.off('chat:message');
+        };
+    }, [socket, id]);
 
     const fetchProjectDetails = async () => {
         const token = localStorage.getItem('opeer_token');
@@ -164,15 +180,7 @@ const ProjectDashboard = () => {
         } catch { /* ignore */ }
     };
 
-    const startPolling = () => {
-        if (pollInterval.current) clearInterval(pollInterval.current);
-        fetchMessages(); // initial
-        pollInterval.current = setInterval(fetchMessages, 3000); // 3s polling
-    };
-
-    const stopPolling = () => {
-        if (pollInterval.current) clearInterval(pollInterval.current);
-    };
+    
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -201,25 +209,15 @@ const ProjectDashboard = () => {
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
-        if (!chatInput.trim()) return;
+        if (!chatInput.trim() || !socket) return;
 
-        setSending(true);
-        const token = localStorage.getItem('opeer_token');
-        try {
-            const res = await fetch(`/api/projects/${id}/chat`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ content: chatInput }),
-            });
-            if (res.ok) {
-                setChatInput('');
-                fetchMessages();
-            }
-        } catch {
-            toast.error('Failed to send message');
-        } finally {
-            setSending(false);
-        }
+        // No more REST call — just emit through socket
+        socket.emit('chat:send', {
+            projectId: id,
+            content: chatInput
+        });
+
+        setChatInput('');
     };
 
     if (loading || fetching || !project) return <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#71717a', background: '#09090b' }}>Loading...</div>;

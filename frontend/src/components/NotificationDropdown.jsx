@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSocket } from '../context/SocketContext';
 import styles from './Navbar.module.css';
 
 const NotificationDropdown = () => {
@@ -8,12 +8,15 @@ const NotificationDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
     const navigate = useNavigate();
+    const { socket } = useSocket();
 
     const fetchNotifications = async () => {
         const token = localStorage.getItem('opeer_token');
         if (!token) return;
         try {
-            const res = await fetch('/api/notifications', { headers: { Authorization: `Bearer ${token}` } });
+            const res = await fetch('/api/notifications', {
+                headers: { Authorization: `Bearer ${token}` }
+            });
             if (res.ok) {
                 const data = await res.json();
                 setNotifications(data.notifications || []);
@@ -21,11 +24,23 @@ const NotificationDropdown = () => {
         } catch { /* ignore */ }
     };
 
+    // Load existing notifications once on mount
     useEffect(() => {
         fetchNotifications();
-        const interval = setInterval(fetchNotifications, 10000); // Poll every 10s
-        return () => clearInterval(interval);
     }, []);
+
+    // Real-time new notifications via socket
+    useEffect(() => {
+        if (!socket) return;
+
+        socket.on('notification:new', (notification) => {
+            setNotifications(prev => [notification, ...prev]);
+        });
+
+        return () => {
+            socket.off('notification:new');
+        };
+    }, [socket]);
 
     // Close on click outside
     useEffect(() => {
@@ -110,26 +125,38 @@ const NotificationDropdown = () => {
                 <div style={{
                     position: 'absolute',
                     top: '120%',
-                    right: '0',  // Align to right edge of container to prevent overflow
+                    right: '0',
                     width: '320px',
-                    maxWidth: '90vw', // Responsive safety
+                    maxWidth: '90vw',
                     background: '#18181b',
                     border: '1px solid #27272a',
                     borderRadius: '12px',
-                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3)',
+                    boxShadow: '0 10px 15px -3px rgba(0,0,0,0.5), 0 4px 6px -2px rgba(0,0,0,0.3)',
                     zIndex: 50,
                     display: 'flex',
                     flexDirection: 'column',
                     overflow: 'hidden',
-                    transformOrigin: 'top right',
                     animation: 'fadeIn 0.2s ease-out'
                 }}>
-                    <div style={{ padding: '12px 16px', borderBottom: '1px solid #27272a', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#27272a' }}>
-                        <span style={{ fontWeight: '600', color: '#fafafa', fontSize: '13px' }}>Notifications</span>
+                    <div style={{
+                        padding: '12px 16px',
+                        borderBottom: '1px solid #27272a',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: '#27272a'
+                    }}>
+                        <span style={{ fontWeight: '600', color: '#fafafa', fontSize: '13px' }}>
+                            Notifications
+                        </span>
                         {unreadCount > 0 && (
                             <button
                                 onClick={handleMarkAllRead}
-                                style={{ background: 'none', border: 'none', color: '#818cf8', fontSize: '11px', cursor: 'pointer', fontWeight: '500' }}
+                                style={{
+                                    background: 'none', border: 'none',
+                                    color: '#818cf8', fontSize: '11px',
+                                    cursor: 'pointer', fontWeight: '500'
+                                }}
                             >
                                 Mark all read
                             </button>
@@ -138,7 +165,12 @@ const NotificationDropdown = () => {
 
                     <div style={{ maxHeight: '360px', overflowY: 'auto' }}>
                         {notifications.length === 0 ? (
-                            <div style={{ padding: '32px 16px', textAlign: 'center', color: '#71717a', fontSize: '13px' }}>
+                            <div style={{
+                                padding: '32px 16px',
+                                textAlign: 'center',
+                                color: '#71717a',
+                                fontSize: '13px'
+                            }}>
                                 No notifications yet
                             </div>
                         ) : (
@@ -150,23 +182,32 @@ const NotificationDropdown = () => {
                                         padding: '12px 16px',
                                         borderBottom: '1px solid #27272a',
                                         cursor: 'pointer',
-                                        background: n.read ? 'transparent' : 'rgba(129, 140, 248, 0.05)',
+                                        background: n.read ? 'transparent' : 'rgba(129,140,248,0.05)',
                                         transition: 'background 0.2s',
                                         position: 'relative',
-                                        display: 'flex', gap: '12px'
+                                        display: 'flex',
+                                        gap: '12px'
                                     }}
                                     onMouseEnter={(e) => e.currentTarget.style.background = '#27272a'}
-                                    onMouseLeave={(e) => e.currentTarget.style.background = n.read ? 'transparent' : 'rgba(129, 140, 248, 0.05)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = n.read ? 'transparent' : 'rgba(129,140,248,0.05)'}
                                 >
                                     <div style={{ paddingTop: '2px' }}>
                                         {!n.read ? (
-                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#818cf8' }} />
+                                            <div style={{
+                                                width: '8px', height: '8px',
+                                                borderRadius: '50%', background: '#818cf8'
+                                            }} />
                                         ) : (
                                             <div style={{ width: '8px', height: '8px' }} />
                                         )}
                                     </div>
                                     <div style={{ flex: 1 }}>
-                                        <p style={{ margin: '0 0 4px 0', fontSize: '13px', color: n.read ? '#a1a1aa' : '#e4e4e7', lineHeight: '1.4' }}>
+                                        <p style={{
+                                            margin: '0 0 4px 0',
+                                            fontSize: '13px',
+                                            color: n.read ? '#a1a1aa' : '#e4e4e7',
+                                            lineHeight: '1.4'
+                                        }}>
                                             {n.message}
                                         </p>
                                         <span style={{ fontSize: '11px', color: '#52525b' }}>

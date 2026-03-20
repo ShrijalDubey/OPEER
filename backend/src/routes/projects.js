@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { io } from '../index.js';
 import prisma from '../lib/prisma.js';
 import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import * as meetingController from '../controllers/meetingController.js';
@@ -225,14 +226,16 @@ router.post('/:id/apply', requireAuth, async (req, res) => {
         });
 
         // Notify owner
-        await prisma.notification.create({
-            data: {
-                userId: project.authorId,
-                type: 'info',
-                message: `New application from ${req.user.name} for "${project.title}"`,
-                link: `/projects/${project.id}/dashboard`
-            }
+        const notification = await prisma.notification.create({
+        data: {
+            userId: project.authorId,
+            type: 'info',
+            message: `New application from ${req.user.name} for "${project.title}"`,
+            link: `/projects/${project.id}/dashboard`
+        }
         });
+
+        io.to(`user:${project.authorId}`).emit('notification:new', notification);
 
         res.status(201).json({ application });
     } catch (err) {
@@ -269,7 +272,6 @@ router.get('/:id/applications', requireAuth, async (req, res) => {
 });
 
 // Update application status (Accept/Reject)
-// Update application status (Accept/Reject)
 router.patch('/:id/applications/:appId', requireAuth, async (req, res) => {
     try {
         const { status } = req.body;
@@ -291,14 +293,16 @@ router.patch('/:id/applications/:appId', requireAuth, async (req, res) => {
         });
 
         // Notify applicant
-        await prisma.notification.create({
-            data: {
-                userId: application.userId,
-                type: status === 'accepted' ? 'success' : 'error',
-                message: `Your application for "${project.title}" was ${status}`,
-                link: status === 'accepted' ? `/projects/${project.id}/dashboard` : null
-            }
+        const notif = await prisma.notification.create({
+        data: {
+            userId: application.userId,
+            type: status === 'accepted' ? 'success' : 'error',
+            message: `Your application for "${project.title}" was ${status}`,
+            link: status === 'accepted' ? `/projects/${project.id}/dashboard` : null
+        }
         });
+
+        io.to(`user:${application.userId}`).emit('notification:new', notif);
 
         res.json({ application });
     } catch (err) {
@@ -323,14 +327,16 @@ router.delete('/:id/leave', requireAuth, async (req, res) => {
         await prisma.application.delete({ where: { id: application.id } });
 
         // Notify the owner
-        await prisma.notification.create({
-            data: {
-                userId: project.authorId,
-                type: 'warning',
-                message: `${req.user.name} left your project "${project.title}"`,
-                link: `/projects/${project.id}/dashboard`
-            }
+        const notif = await prisma.notification.create({
+        data: {
+            userId: project.authorId,
+            type: 'warning',
+            message: `${req.user.name} left your project "${project.title}"`,
+            link: `/projects/${project.id}/dashboard`
+        }
         });
+
+        io.to(`user:${project.authorId}`).emit('notification:new', notif);
 
         res.json({ message: 'Left project successfully' });
     } catch (err) {
@@ -356,14 +362,16 @@ router.delete('/:id/members/:userId', requireAuth, async (req, res) => {
         await prisma.application.delete({ where: { id: application.id } });
 
         // Notify the kicked member
-        await prisma.notification.create({
-            data: {
-                userId: req.params.userId,
-                type: 'warning',
-                message: `You were removed from "${project.title}"`,
-                link: null
-            }
+        const notif = await prisma.notification.create({
+        data: {
+            userId: req.params.userId,
+            type: 'warning',
+            message: `You were removed from "${project.title}"`,
+            link: null
+        }
         });
+
+        io.to(`user:${req.params.userId}`).emit('notification:new', notif);
 
         res.json({ message: 'Member removed successfully' });
     } catch (err) {

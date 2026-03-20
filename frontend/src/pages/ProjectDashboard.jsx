@@ -311,6 +311,7 @@ const ProjectDashboard = () => {
                                 src={project.author?.avatarUrl || `https://ui-avatars.com/api/?name=${project.author?.name}&background=random`}
                                 alt=""
                                 className={`${styles.avatar} ${styles.ownerAvatar}`}
+                                referrerPolicy="no-referrer"
                             />
                             <div style={{ flex: 1 }}>
                                 <div className={styles.memberName}>{project.author?.name}</div>
@@ -325,6 +326,7 @@ const ProjectDashboard = () => {
                                     src={app.user.avatarUrl || `https://ui-avatars.com/api/?name=${app.user.name}&background=random`}
                                     alt=""
                                     className={styles.avatar}
+                                    referrerPolicy="no-referrer"
                                 />
                                 <div style={{ flex: 1 }}>
                                     <div className={styles.memberName}>{app.user.name}</div>
@@ -366,6 +368,7 @@ const ProjectDashboard = () => {
                                             src={app.user.avatarUrl || `https://ui-avatars.com/api/?name=${app.user.name}&background=random`}
                                             alt=""
                                             className={styles.avatar}
+                                            referrerPolicy="no-referrer"
                                         />
                                         <div style={{ flex: 1 }}>
                                             <div className={styles.memberName}>{app.user.name}</div>
@@ -518,6 +521,7 @@ const ProjectDashboard = () => {
                                                         src={msg.sender?.avatarUrl || `https://ui-avatars.com/api/?name=${msg.sender?.name || 'User'}&background=random`}
                                                         alt=""
                                                         className={styles.msgAvatar}
+                                                        referrerPolicy="no-referrer"
                                                     />
                                                     <span className={styles.msgSender}>{msg.sender?.name}</span>
                                                     <span className={styles.msgTime}>{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
@@ -578,7 +582,7 @@ const ProjectDashboard = () => {
 };
 
 // Helper for input fields (Outside component to prevent focus loss)
-const InputField = ({ label, value, field, placeholder, multiline = false, editing, onChange }) => (
+const InputField = ({ label, value, placeholder, multiline = false, editing, onChange }) => (
     <div className={styles.inputField}>
         <label className={styles.inputLabel}>{label}</label>
         {editing ? (

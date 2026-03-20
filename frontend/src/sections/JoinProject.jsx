@@ -258,7 +258,7 @@ const JoinProject = () => {
                               marginLeft: idx > 0 ? '-8px' : '0'
                             }}
                           >
-                            {member.avatarUrl ? <img src={member.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%' }} /> : member.name?.charAt(0).toUpperCase()}
+                            {member.avatarUrl ? <img src={member.avatarUrl} alt="" style={{ width: '100%', height: '100%', borderRadius: '50%' }} referrerPolicy="no-referrer" /> : member.name?.charAt(0).toUpperCase()}
                           </div>
                         ))}
                       </div>

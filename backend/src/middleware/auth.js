@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import prisma from '../lib/prisma.js';
 
 /**
  * Auth middleware — verifies JWT from cookie or Authorization header

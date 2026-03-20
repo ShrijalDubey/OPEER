@@ -103,7 +103,7 @@ const ProfileSetupModal = () => {
                 <div className={styles.header}>
                     <div className={styles.avatarCircle}>
                         {user?.avatarUrl ? (
-                            <img src={user.avatarUrl} alt="" className={styles.avatarImg} />
+                            <img src={user.avatarUrl} alt="" className={styles.avatarImg} referrerPolicy="no-referrer" />
                         ) : (
                             <span>{user?.name?.charAt(0)?.toUpperCase()}</span>
                         )}

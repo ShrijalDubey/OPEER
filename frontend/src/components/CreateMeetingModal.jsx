@@ -24,10 +24,6 @@ const CreateMeetingModal = ({ onClose, onSave }) => {
         });
     };
 
-    // Get current date/time for min attribute
-    const now = new Date();
-    const isoString = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-
     return (
         <div className={styles.overlay} onClick={onClose}>
             <div className={styles.modal} onClick={e => e.stopPropagation()}>

@@ -85,6 +85,7 @@ const ApplyProjectModal = ({ isOpen, onClose, projectId, projectTitle, onApply }
                                     src={user?.avatarUrl || `https://ui-avatars.com/api/?name=${user?.name}&background=random`}
                                     alt=""
                                     style={{ width: '36px', height: '36px', borderRadius: '50%', border: '2px solid #3f3f46' }}
+                                    referrerPolicy="no-referrer"
                                 />
                                 <div>
                                     <div style={{ fontSize: '14px', fontWeight: '600', color: '#fafafa' }}>{user?.name}</div>

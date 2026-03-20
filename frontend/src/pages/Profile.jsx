@@ -182,7 +182,7 @@ const Profile = () => {
                     <div className={styles.profileHeader}>
                         <div className={styles.avatarSection}>
                             {profileData.avatarUrl ? (
-                                <img src={profileData.avatarUrl} alt={profileData.name} className={styles.avatar} />
+                                <img src={profileData.avatarUrl} alt={profileData.name} className={styles.avatar} referrerPolicy="no-referrer" />
                             ) : (
                                 <div className={styles.avatarPlaceholder}>
                                     {profileData.name?.charAt(0)?.toUpperCase()}

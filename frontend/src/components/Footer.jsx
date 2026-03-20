@@ -1,14 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Footer.module.css';
-import logo from '../assets/logo.png';
 
 const Footer = () => {
   return (
     <footer className={styles.footer} id="contact">
       <div className={styles.container}>
         <div className={styles.brandSide}>
-          {/* <img src={logo} alt="Opeer" className={styles.logo} /> */}
           <h2 style={{ color: '#fff', fontSize: '24px', fontWeight: '800', marginBottom: '16px', letterSpacing: '1px' }}>OPEER</h2>
           <p>The decentralized campus for modern student collaboration.</p>
         </div>

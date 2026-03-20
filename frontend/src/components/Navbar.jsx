@@ -127,7 +127,7 @@ const Navbar = () => {
                 <div className={styles.userSection}>
                   <div className={styles.userAvatar} onClick={() => navigate('/profile')}>
                     {user.avatarUrl ? (
-                      <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} />
+                      <img src={user.avatarUrl} alt={user.name} className={styles.avatarImg} referrerPolicy="no-referrer" />
                     ) : (
                       <span>{user.name?.charAt(0)?.toUpperCase()}</span>
                     )}

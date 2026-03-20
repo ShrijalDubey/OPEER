@@ -219,7 +219,7 @@ const KanbanBoard = ({ projectId }) => {
                                             <div className={styles.taskFooter}>
                                                 <div className={styles.assignee} title={task.assignee.name}>
                                                     {task.assignee.avatarUrl ? (
-                                                        <img src={task.assignee.avatarUrl} alt="" style={{ width: '100%', height: '100%' }} />
+                                                        <img src={task.assignee.avatarUrl} alt="" style={{ width: '100%', height: '100%' }} referrerPolicy="no-referrer" />
                                                     ) : (
                                                         task.assignee.name[0].toUpperCase()
                                                     )}

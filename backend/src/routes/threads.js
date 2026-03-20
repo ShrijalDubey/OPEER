@@ -191,7 +191,6 @@ router.get('/:slug/projects', async (req, res) => {
             dept: p.dept,
             year: p.year,
             githubUrl: p.githubUrl,
-            githubUrl: p.githubUrl,
             author: p.author,
             team: p.applications.map((a) => a.user),
             applicationCount: p._count.applications,

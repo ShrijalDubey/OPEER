@@ -64,48 +64,11 @@ router.post('/:id/meetings', requireAuth, meetingController.createMeeting);
 router.get('/:id/meetings', requireAuth, meetingController.getProjectMeetings);
 router.delete('/meetings/:meetingId', requireAuth, meetingController.deleteMeeting);
 
-// ─── Get all projects (public) ──────────────────────────
 // ─── Get all projects (public/personalized) ──────────────────────────
 router.get('/', optionalAuth, async (req, res) => {
     try {
         const { search, skills } = req.query;
         let where = {};
-
-        // 1. If user is logged in, filter by joined threads
-        if (req.user) {
-            const memberships = await prisma.threadMember.findMany({
-                where: { userId: req.user.id },
-                select: { threadId: true }
-            });
-            const threadIds = memberships.map(m => m.threadId);
-            where.threadId = { in: threadIds };
-        }
-
-        // 2. Search Filter
-        if (search) {
-            where.OR = [
-                { title: { contains: search, mode: 'insensitive' } },
-                { description: { contains: search, mode: 'insensitive' } },
-                { skills: { hasSome: [search] } },
-                { tags: { hasSome: [search] } }
-            ];
-        }
-
-        // 3. Skills Filter (comma separated)
-        if (skills) {
-            const skillList = skills.split(',').map(s => s.trim()).filter(Boolean);
-            if (skillList.length > 0) {
-                // Determine if we want match ANY or ALL. 'hasSome' matches any.
-                // User said "filter by skills too". Usually implies "contains these skills".
-                // I'll use hasSome for now.
-                // Note: If both search and skills are present, we need to be careful not to overwrite `where.skills`.
-                // Actually, `where` structure in Prisma:
-                // If I set `where.skills` for search, and `where.skills` for filter, they might conflict.
-                // Better to use `AND`.
-            }
-        }
-
-        // Let's restructure `where` to use AND for robust combination
         const andConditions = [];
 
         // Thread Filter

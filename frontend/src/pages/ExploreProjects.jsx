@@ -140,7 +140,11 @@ const ExploreProjects = () => {
                     <>
                         <div className={styles.projectsGrid}>
                             {projects.length === 0 ? (
-                                <div className={styles.noProjects}>No projects found matching "{searchTerm}"</div>
+                                <div className={styles.noProjects}>
+                                    {searchTerm
+                                        ? `No projects found matching "${searchTerm}"`
+                                        : 'No projects available yet. Join a thread and start exploring!'}
+                                </div>
                             ) : (
                                 projects.slice(0, visibleCount).map(project => (
                                     <div key={project.id} className={styles.projectCard} onClick={() => handleProjectClick(project)}>
@@ -162,8 +166,18 @@ const ExploreProjects = () => {
 
                                         <div className={styles.cardFooter}>
                                             <div className={styles.authorInfo}>
-                                                <img src={project.author.avatarUrl || `https://ui-avatars.com/api/?name=${project.author.name}&background=random`} alt="" className={styles.authorAvatar} />
+                                                <img src={project.author.avatarUrl || `https://ui-avatars.com/api/?name=${project.author.name}&background=random`} alt="" className={styles.authorAvatar} referrerPolicy="no-referrer" />
                                                 <span className={styles.authorName}>{project.author.name}</span>
+                                            </div>
+                                            <div className={styles.slugPill}>
+                                                <span style={{ 
+                                                    fontSize: '11px', 
+                                                    color: '#818cf8',
+                                                    fontWeight: '600',
+                                                    fontFamily: 'monospace'
+                                                }}>
+                                                    /{project.thread?.slug}
+                                                </span>
                                             </div>
                                             {isLoggedIn && getActionButton(project)}
                                         </div>

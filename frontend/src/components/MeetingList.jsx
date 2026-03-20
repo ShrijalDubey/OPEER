@@ -139,6 +139,7 @@ const MeetingList = ({ project }) => {
                                             src={meeting.createdBy?.avatarUrl || `https://ui-avatars.com/api/?name=${meeting.createdBy?.name}&background=random`}
                                             className={styles.avatar}
                                             alt=""
+                                            referrerPolicy="no-referrer"
                                         />
                                         <span>Host: {meeting.createdBy?.name}</span>
                                     </div>

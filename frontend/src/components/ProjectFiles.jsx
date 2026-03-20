@@ -47,7 +47,7 @@ const ProjectFiles = ({ project, onUpdate }) => {
     };
 
     const handleDeleteFile = async (index) => {
-        if (!confirm('Are you sure you want to remove this link?')) return;
+        if (!window.confirm('Are you sure you want to remove this link?')) return;
 
         setLoading(true);
         const updatedFiles = files.filter((_, i) => i !== index);

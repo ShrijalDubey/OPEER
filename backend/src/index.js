@@ -14,6 +14,7 @@ import threadRoutes from './routes/threads.js';
 import projectRoutes from './routes/projects.js';
 import userRoutes from './routes/users.js';
 import notificationRoutes from './routes/notifications.js';
+import { generateChatResponse } from './lib/ai.js';
 
 const app = express();
 const httpServer = createServer(app);
@@ -93,6 +94,42 @@ io.on('connection', (socket) => {
       // Broadcast to everyone in the project room including sender
       io.to(`project:${projectId}`).emit('chat:message', message);
 
+      // --- AI INTEGRATION: Handle /ai commands ---
+      if (content.trim().toLowerCase().startsWith('/ai ')) {
+        const userPrompt = content.substring(4).trim();
+        if (userPrompt) {
+          const aiUser = await prisma.user.findUnique({ where: { email: 'ai@opeer.com' } });
+          if (aiUser) {
+            try {
+              const history = await prisma.projectMessage.findMany({
+                where: { projectId },
+                orderBy: { createdAt: 'desc' },
+                take: 10,
+                include: { sender: { select: { name: true } } }
+              });
+
+              const aiResponseText = await generateChatResponse(project, history.reverse(), userPrompt);
+
+              const aiMessage = await prisma.projectMessage.create({
+                data: { content: aiResponseText, projectId, senderId: aiUser.id },
+                include: { sender: { select: { id: true, name: true, avatarUrl: true } } }
+              });
+
+              io.to(`project:${projectId}`).emit('chat:message', aiMessage);
+            } catch (aiErr) {
+              console.error('AI Chat Error:', aiErr);
+              // Send error message from AI
+              const aiMessage = await prisma.projectMessage.create({
+                data: { content: "Sorry, I am having trouble connecting to my cognitive cores right now.", projectId, senderId: aiUser.id },
+                include: { sender: { select: { id: true, name: true, avatarUrl: true } } }
+              });
+              io.to(`project:${projectId}`).emit('chat:message', aiMessage);
+            }
+          }
+        }
+      }
+      // -----------------------------------------
+
     } catch (err) {
       console.error('Socket chat error:', err);
     }
@@ -132,8 +169,30 @@ app.use((err, _req, res, _next) => {
   res.status(500).json({ error: 'Internal server error' });
 });
 
-// ─── Use httpServer not app ──────────────────────────────
-httpServer.listen(PORT, () => {
+// ─── Server Startup & Seeding ───────────────────────────
+async function ensureAiUser() {
+  try {
+    const aiUser = await prisma.user.upsert({
+      where: { email: 'ai@opeer.com' },
+      update: {},
+      create: {
+        email: 'ai@opeer.com',
+        name: 'OPEER AI',
+        provider: 'system',
+        providerId: 'opeer-ai',
+        avatarUrl: 'https://ui-avatars.com/api/?name=OPEER+AI&background=0D8ABC&color=fff',
+        bio: 'I am the OPEER artificial intelligence assistant.',
+        skills: ['AI', 'Helpfulness']
+      }
+    });
+    console.log(`🤖 AI User seeded/verified with ID: ${aiUser.id}`);
+  } catch (err) {
+    console.error('Failed to seed AI user:', err);
+  }
+}
+
+httpServer.listen(PORT, async () => {
   console.log(`\n🚀 OPEER API running at http://localhost:${PORT}`);
   console.log(`   Socket.io enabled ✓\n`);
+  await ensureAiUser();
 });

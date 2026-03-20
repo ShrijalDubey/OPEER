@@ -3,6 +3,7 @@ import { io } from '../index.js';
 import prisma from '../lib/prisma.js';
 import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import * as meetingController from '../controllers/meetingController.js';
+import { generateProjectMatchScore } from '../lib/ai.js';
 
 const router = Router();
 
@@ -181,6 +182,31 @@ router.get('/:id', optionalAuth, async (req, res) => {
     } catch (err) {
         console.error('GET /api/projects/:id error:', err);
         res.status(500).json({ error: 'Failed to fetch project' });
+    }
+});
+
+// ─── Get AI Match Score ─────────────────────────────────
+
+router.get('/:id/match-score', requireAuth, async (req, res) => {
+    try {
+        const project = await prisma.project.findUnique({
+            where: { id: req.params.id },
+            select: { title: true, description: true, goal: true, executionPlan: true, skills: true }
+        });
+
+        if (!project) return res.status(404).json({ error: 'Project not found' });
+
+        const userContext = {
+            skills: req.user.skills,
+            bio: req.user.bio,
+            department: req.user.dept || 'Not specified'
+        };
+
+        const result = await generateProjectMatchScore(userContext, project);
+        res.json(result);
+    } catch (err) {
+        console.error('GET /api/projects/:id/match-score error:', err);
+        res.status(500).json({ error: 'Failed to calculate match score' });
     }
 });
 

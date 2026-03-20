@@ -6,6 +6,7 @@ import { useToast } from '../components/Toast';
 import KanbanBoard from '../components/KanbanBoard';
 import ProjectFiles from '../components/ProjectFiles';
 import MeetingList from '../components/MeetingList';
+import ReactMarkdown from 'react-markdown';
 import styles from './ProjectDashboard.module.css';
 
 const ProjectDashboard = () => {
@@ -25,6 +26,10 @@ const ProjectDashboard = () => {
     // UI State management - knowing when things are loading or being edited
     const [fetching, setFetching] = useState(true);
     const [editingInfo, setEditingInfo] = useState(false);
+
+    // AI Match Score State
+    const [matchScore, setMatchScore] = useState(null);
+    const [calculatingScore, setCalculatingScore] = useState(false);
 
     // Form state for editing project details
     const [infoForm, setInfoForm] = useState({ goal: '', executionPlan: '', resources: '' });
@@ -109,6 +114,25 @@ const ProjectDashboard = () => {
                 setPendingApps(data.applications.filter(a => a.status === 'pending') || []);
             }
         } catch { /* ignore silently */ }
+    };
+
+    const handleCalculateMatch = async () => {
+        setCalculatingScore(true);
+        const token = localStorage.getItem('opeer_token');
+        try {
+            const res = await fetch(`/api/projects/${id}/match-score`, { headers: { Authorization: `Bearer ${token}` } });
+            if (res.ok) {
+                const data = await res.json();
+                setMatchScore(data);
+                toast.success('AI Match Score calculated!');
+            } else {
+                toast.error('Failed to calculate match');
+            }
+        } catch {
+            toast.error('Something went wrong contacting the AI');
+        } finally {
+            setCalculatingScore(false);
+        }
     };
 
     const handleAppStatus = async (appId, status) => {
@@ -253,6 +277,51 @@ const ProjectDashboard = () => {
                             {project.skills.map((skill, i) => (
                                 <span key={i} className={styles.skillTag}>{skill}</span>
                             ))}
+                        </div>
+                    )}
+
+                    {/* AI Match Score UI */}
+                    {!isOwner && (
+                        <div style={{ marginTop: '20px', padding: '16px', borderRadius: '12px', background: '#18181b', border: '1px solid #27272a' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: matchScore ? '12px' : '0' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <span style={{ fontSize: '18px' }}>🤖</span>
+                                    <h3 style={{ margin: 0, fontSize: '15px', color: '#e4e4e7', fontWeight: '600' }}>AI Match Score</h3>
+                                </div>
+                                {!matchScore && (
+                                    <button 
+                                        onClick={handleCalculateMatch} 
+                                        disabled={calculatingScore}
+                                        style={{ 
+                                            background: '#3b82f6', color: '#fff', border: 'none', 
+                                            padding: '8px 16px', borderRadius: '8px', fontSize: '14px', 
+                                            fontWeight: '600', cursor: calculatingScore ? 'wait' : 'pointer',
+                                            opacity: calculatingScore ? 0.7 : 1
+                                        }}
+                                    >
+                                        {calculatingScore ? 'Calculating...' : 'Calculate Fit'}
+                                    </button>
+                                )}
+                            </div>
+                            
+                            {matchScore && (
+                                <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                                    <div style={{ 
+                                        background: matchScore.score >= 80 ? 'rgba(34, 197, 94, 0.2)' : matchScore.score >= 50 ? 'rgba(234, 179, 8, 0.2)' : 'rgba(239, 68, 68, 0.2)',
+                                        color: matchScore.score >= 80 ? '#4ade80' : matchScore.score >= 50 ? '#facc15' : '#f87171',
+                                        padding: '12px', borderRadius: '50%', fontWeight: 'bold', fontSize: '18px',
+                                        minWidth: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        border: `1px solid ${matchScore.score >= 80 ? '#4ade80' : matchScore.score >= 50 ? '#facc15' : '#f87171'}`
+                                    }}>
+                                        {matchScore.score}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <p style={{ margin: 0, fontSize: '14px', color: '#a1a1aa', lineHeight: '1.6' }}>
+                                            {matchScore.reason}
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -508,11 +577,12 @@ const ProjectDashboard = () => {
                             <div className={styles.chatContainer}>
                                 {messages.map((msg, idx) => {
                                     const isMe = msg.senderId === user?.id;
+                                    const isAi = msg.sender?.name === 'OPEER AI';
                                     const prevMsg = messages[idx - 1];
                                     const isSequence = prevMsg && prevMsg.senderId === msg.senderId && (new Date(msg.createdAt) - new Date(prevMsg.createdAt) < 60000);
 
                                     return (
-                                        <div key={msg.id} className={styles.messageWrapper} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', marginTop: isSequence ? '2px' : '24px', alignItems: isMe ? 'flex-end' : 'flex-start' }}>
+                                        <div key={msg.id} className={styles.messageWrapper} style={{ alignSelf: isMe ? 'flex-end' : 'flex-start', marginTop: isSequence ? '2px' : '24px', alignItems: isMe ? 'flex-end' : 'flex-start', maxWidth: isAi ? '85%' : '70%' }}>
                                             {!isSequence && (
                                                 <div className={styles.msgHeader} style={{ flexDirection: isMe ? 'row-reverse' : 'row' }}>
                                                     <img
@@ -521,12 +591,18 @@ const ProjectDashboard = () => {
                                                         className={styles.msgAvatar}
                                                         referrerPolicy="no-referrer"
                                                     />
-                                                    <span className={styles.msgSender}>{msg.sender?.name}</span>
+                                                    <span className={styles.msgSender} style={{ color: isAi ? '#c084fc' : undefined }}>
+                                                        {msg.sender?.name} {isAi && '✨'}
+                                                    </span>
                                                     <span className={styles.msgTime}>{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                                 </div>
                                             )}
-                                            <div className={`${styles.msgBubble} ${isMe ? styles.msgBubbleMe : styles.msgBubbleOthers}`}>
-                                                {msg.content}
+                                            <div className={`${styles.msgBubble} ${isMe ? styles.msgBubbleMe : isAi ? styles.msgBubbleAi : styles.msgBubbleOthers}`}>
+                                                {isAi ? (
+                                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                                ) : (
+                                                    msg.content
+                                                )}
                                             </div>
                                         </div>
                                     );
@@ -540,7 +616,7 @@ const ProjectDashboard = () => {
                                     <input
                                         value={chatInput}
                                         onChange={(e) => setChatInput(e.target.value)}
-                                        placeholder="Type your message..."
+                                        placeholder="Type your message... (use '/ai' to ask the assistant)"
                                         className={styles.chatInput}
                                     />
                                     <button

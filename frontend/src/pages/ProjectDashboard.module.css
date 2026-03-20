@@ -397,6 +397,36 @@
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.msgBubbleAi {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
+    color: #f4f4f5;
+    border: 1px solid rgba(168, 85, 247, 0.25);
+    box-shadow: 0 0 16px rgba(168, 85, 247, 0.08);
+}
+
+.msgBubbleAi p {
+    margin-top: 0;
+    margin-bottom: 0.75em;
+}
+
+.msgBubbleAi p:last-child {
+    margin-bottom: 0;
+}
+
+.msgBubbleAi ul, .msgBubbleAi ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+
+.msgBubbleAi li {
+    margin-bottom: 0.25em;
+}
+
+.msgBubbleAi strong {
+    color: #fff;
+    font-weight: 700;
+}
+
 .inputArea {
     position: absolute;
     bottom: 24px;

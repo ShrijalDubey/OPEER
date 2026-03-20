@@ -3,7 +3,7 @@ import { io } from '../index.js';
 import prisma from '../lib/prisma.js';
 import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import * as meetingController from '../controllers/meetingController.js';
-import { generateProjectMatchScore } from '../lib/ai.js';
+import { generateProjectMatchScore, generateBatchProjectMatchScores } from '../lib/ai.js';
 
 const router = Router();
 
@@ -207,6 +207,34 @@ router.get('/:id/match-score', requireAuth, async (req, res) => {
     } catch (err) {
         console.error('GET /api/projects/:id/match-score error:', err);
         res.status(500).json({ error: 'Failed to calculate match score' });
+    }
+});
+
+// ─── Bulk AI Match Recommender ──────────────────────────
+
+router.post('/recommend-batch', requireAuth, async (req, res) => {
+    try {
+        const { projectIds } = req.body;
+        if (!projectIds || !Array.isArray(projectIds)) {
+            return res.status(400).json({ error: 'projectIds array is required' });
+        }
+
+        const projects = await prisma.project.findMany({
+            where: { id: { in: projectIds } },
+            select: { id: true, title: true, description: true, goal: true, skills: true }
+        });
+
+        const userContext = {
+            skills: req.user.skills,
+            bio: req.user.bio,
+            department: req.user.dept || 'Not specified'
+        };
+
+        const results = await generateBatchProjectMatchScores(userContext, projects);
+        res.json({ recommendations: results });
+    } catch (err) {
+        console.error('POST /api/projects/recommend-batch error:', err);
+        res.status(500).json({ error: 'Failed to calculate batch match scores' });
     }
 });
 

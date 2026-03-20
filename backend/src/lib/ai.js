@@ -67,6 +67,43 @@ export async function generateProjectMatchScore(userContext, projectContext) {
   }
 }
 
+export async function generateBatchProjectMatchScores(userContext, projects) {
+  const systemInstruction = `
+    You are an expert project matching assistant for OPEER.
+    You will receive a User's profile and a JSON array of Projects.
+    Evaluate the fit for each project based on the user's skills and bio.
+    Return exactly a valid JSON array of objects (no markdown block, just raw JSON) with this format:
+    [
+      {
+        "projectId": "id-from-input",
+        "score": <number 0-100 indicating match quality>,
+        "reason": "<1-sentence reason why it matches the user>"
+      }
+    ]
+  `;
+
+  const userPrompt = `
+    User Profile:
+    ${JSON.stringify(userContext, null, 2)}
+    
+    Projects:
+    ${JSON.stringify(projects.map(p => ({
+      id: p.id, title: p.title, description: p.description, skills: p.skills, goal: p.goal 
+    })), null, 2)}
+    
+    Please provide the JSON array result.
+  `;
+
+  try {
+    let result = await askGemini(systemInstruction, userPrompt);
+    result = result.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(result);
+  } catch (err) {
+    console.error('Failed to parse batch match score:', err);
+    return [];
+  }
+}
+
 export async function generateChatResponse(projectContext, chatHistory, userPrompt) {
   const systemInstruction = `
     You are OPEER AI, a helpful chat assistant residing inside a project's collaboration room.

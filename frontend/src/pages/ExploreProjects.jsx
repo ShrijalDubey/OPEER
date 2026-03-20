@@ -17,6 +17,10 @@ const ExploreProjects = () => {
     const [visibleCount, setVisibleCount] = useState(9); // Pagination
     const [applyModal, setApplyModal] = useState({ open: false, projectId: null, projectTitle: '' });
 
+    // AI Recommend State
+    const [aiFiltering, setAiFiltering] = useState(false);
+    const [aiRecommendations, setAiRecommendations] = useState(null);
+
     useEffect(() => {
         const fetchProjects = async () => {
             setFetching(true);
@@ -33,6 +37,7 @@ const ExploreProjects = () => {
                 const data = await res.json();
                 if (res.ok) {
                     setProjects(data.projects);
+                    setAiRecommendations(null); // Reset AI data on new search
                 } else {
                     console.error('Failed to fetch projects');
                 }
@@ -91,6 +96,52 @@ const ExploreProjects = () => {
         }
     };
 
+    const handleAIFilter = async () => {
+        if (!isLoggedIn) {
+            toast.warn('Please login to get AI recommendations');
+            return;
+        }
+        if (projects.length === 0) return;
+        
+        setAiFiltering(true);
+        const token = localStorage.getItem('opeer_token');
+        try {
+            const projectIds = projects.map(p => p.id);
+            const res = await fetch('/api/projects/recommend-batch', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                body: JSON.stringify({ projectIds })
+            });
+            
+            if (res.ok) {
+                const data = await res.json();
+                const recMap = {};
+                if (data.recommendations && Array.isArray(data.recommendations)) {
+                    data.recommendations.forEach(r => { recMap[r.projectId] = r; });
+                }
+                setAiRecommendations(recMap);
+                
+                const sorted = [...projects].sort((a, b) => {
+                    const scoreA = recMap[a.id]?.score || 0;
+                    const scoreB = recMap[b.id]?.score || 0;
+                    return scoreB - scoreA;
+                });
+                
+                const filtered = sorted.filter(p => (recMap[p.id]?.score || 0) >= 50);
+                setProjects(filtered.length > 0 ? filtered : sorted);
+                setVisibleCount(18); // Show more since we filtered
+                toast.success('Projects sorted by AI match!');
+            } else {
+                toast.error('Failed to get AI recommendations');
+            }
+        } catch (err) {
+            console.error(err);
+            toast.error('AI Service unavailable');
+        } finally {
+            setAiFiltering(false);
+        }
+    };
+
     const getActionButton = (project) => {
         if (project.author.id === user?.id) {
             return <button onClick={(e) => { e.stopPropagation(); navigate(`/projects/${project.id}/dashboard`); }} className={`${styles.btn} ${styles.btnSecondary}`}>Manage</button>;
@@ -119,19 +170,40 @@ const ExploreProjects = () => {
                     </p>
                 </div>
 
-                {/* Search Bar */}
-                <div className={styles.searchWrapper}>
-                    <input
-                        type="text"
-                        placeholder="Search by title, skills, or tags..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className={styles.searchInput}
-                    />
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.searchIcon}>
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
+                {/* Search Bar & AI Filter */}
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'stretch', marginBottom: '30px' }}>
+                    <div className={styles.searchWrapper} style={{ flex: 1, margin: 0 }}>
+                        <input
+                            type="text"
+                            placeholder="Search by title, skills, or tags..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={styles.searchIcon}>
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    
+                    {isLoggedIn && (
+                        <button 
+                            onClick={handleAIFilter} 
+                            disabled={aiFiltering || projects.length === 0}
+                            style={{
+                                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(168, 85, 247, 0.15) 100%)',
+                                color: '#f4f4f5', border: '1px solid rgba(168, 85, 247, 0.3)',
+                                borderRadius: '30px', padding: '0 24px', fontWeight: '600',
+                                cursor: aiFiltering ? 'wait' : 'pointer', transition: 'all 0.2s',
+                                display: 'flex', alignItems: 'center', gap: '8px', 
+                                opacity: aiFiltering || projects.length === 0 ? 0.6 : 1,
+                                boxShadow: aiFiltering ? 'none' : '0 4px 12px rgba(168, 85, 247, 0.15)'
+                            }}
+                        >
+                            <span style={{ fontSize: '18px' }}>🤖</span>
+                            {aiFiltering ? 'Analyzing...' : 'AI Recommend'}
+                        </button>
+                    )}
                 </div>
 
                 {fetching ? (
@@ -156,6 +228,29 @@ const ExploreProjects = () => {
                                         <p className={styles.cardDescription}>
                                             {project.description}
                                         </p>
+
+                                        {/* AI Recommendation Reason */}
+                                        {aiRecommendations && aiRecommendations[project.id] && (
+                                            <div style={{
+                                                padding: '10px 12px', background: 'rgba(168, 85, 247, 0.1)',
+                                                borderLeft: '3px solid #c084fc', borderRadius: '4px 8px 8px 4px',
+                                                marginBottom: '16px', fontSize: '13px', color: '#e4e4e7',
+                                                display: 'flex', gap: '8px', alignItems: 'flex-start',
+                                                lineHeight: '1.5'
+                                            }}>
+                                                <span style={{ fontSize: '16px' }}>✨</span>
+                                                <div style={{ flex: 1 }}>
+                                                    <div style={{ 
+                                                        fontWeight: 'bold', 
+                                                        color: aiRecommendations[project.id].score >= 80 ? '#4ade80' : aiRecommendations[project.id].score >= 50 ? '#facc15' : '#f87171',
+                                                        marginBottom: '4px'
+                                                    }}>
+                                                        Match Score: {aiRecommendations[project.id].score}%
+                                                    </div>
+                                                    {aiRecommendations[project.id].reason}
+                                                </div>
+                                            </div>
+                                        )}
 
                                         <div className={styles.skillsWrapper}>
                                             {project.skills.slice(0, 3).map((skill, i) => (

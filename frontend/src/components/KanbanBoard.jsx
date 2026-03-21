@@ -22,6 +22,8 @@ const KanbanBoard = ({ projectId }) => {
     const [editingTask, setEditingTask] = useState(null);
     const [newTaskStatus, setNewTaskStatus] = useState('todo'); // For default column
     const [formData, setFormData] = useState({ title: '', description: '', priority: 'medium' });
+    const [generating, setGenerating] = useState(false);
+    const [visibleDone, setVisibleDone] = useState(3);
 
     useEffect(() => {
         fetchTasks();
@@ -167,10 +169,48 @@ const KanbanBoard = ({ projectId }) => {
         setEditingTask(null);
     };
 
+    const handleGenerateTasks = async () => {
+        setGenerating(true);
+        try {
+            const token = localStorage.getItem('opeer_token');
+            const res = await fetch(`/api/projects/${projectId}/tasks/generate`, {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                setTasks(prev => [...prev, ...data.tasks]);
+                toast.success('Kanban tasks magically generated!');
+            } else {
+                const errData = await res.json();
+                toast.error(errData.error || 'Failed to generate tasks');
+            }
+        } catch(err) {
+            toast.error('AI Service unavailable');
+        } finally {
+            setGenerating(false);
+        }
+    };
+
     return (
-        <>
-            <div className={styles.boardContainer}>
-                {Object.entries(COLUMNS).map(([status, label]) => (
+        <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <div className={styles.kanbanHeader}>
+                <h2 className={styles.kanbanTitle}>Project Tasks</h2>
+                <button 
+                    onClick={handleGenerateTasks}
+                    disabled={generating}
+                    className={styles.aiGenerateBtn}
+                >
+                    {generating ? '✨ Analyzing Project...' : '🪄 Auto-generate Tasks'}
+                </button>
+            </div>
+            <div className={styles.boardContainer} style={{ flex: 1, minHeight: 0 }}>
+                {Object.entries(COLUMNS).map(([status, label]) => {
+                    const columnTasks = tasks.filter(t => t.status === status);
+                    const isDone = status === 'done';
+                    const displayTasks = isDone ? columnTasks.slice(0, visibleDone) : columnTasks;
+
+                    return (
                     <div
                         key={status}
                         className={styles.column}
@@ -181,7 +221,7 @@ const KanbanBoard = ({ projectId }) => {
                             <div className={styles.columnTitle}>
                                 {label}
                                 <span className={styles.columnCount}>
-                                    {tasks.filter(t => t.status === status).length}
+                                    {columnTasks.length}
                                 </span>
                             </div>
                             <button
@@ -193,9 +233,7 @@ const KanbanBoard = ({ projectId }) => {
                         </div>
 
                         <div className={styles.taskList}>
-                            {tasks
-                                .filter(t => t.status === status)
-                                .map(task => (
+                            {displayTasks.map(task => (
                                     <div
                                         key={task.id}
                                         className={styles.taskCard}
@@ -228,12 +266,23 @@ const KanbanBoard = ({ projectId }) => {
                                         )}
                                     </div>
                                 ))}
+                            
+                            {isDone && columnTasks.length > visibleDone && (
+                                <button 
+                                    className={styles.addTaskBtn} 
+                                    onClick={() => setVisibleDone(prev => prev + 5)}
+                                    style={{ color: '#818cf8', borderColor: '#818cf8', fontWeight: 'bold' }}
+                                >
+                                    Show more ({columnTasks.length - visibleDone})
+                                </button>
+                            )}
+
                             <button className={styles.addTaskBtn} onClick={() => openModal(null, status)}>
                                 + Add Task
                             </button>
                         </div>
                     </div>
-                ))}
+                )})}
             </div>
 
             {isModalOpen && (
@@ -283,7 +332,7 @@ const KanbanBoard = ({ projectId }) => {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 };
 

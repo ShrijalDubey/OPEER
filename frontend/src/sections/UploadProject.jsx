@@ -10,6 +10,8 @@ const UploadProject = () => {
   const toast = useToast();
   const [threads, setThreads] = useState([]);
   const [submitting, setSubmitting] = useState(false);
+  const [enhancing, setEnhancing] = useState(false);
+  const [aiIdea, setAiIdea] = useState('');
   const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     title: '',
@@ -48,6 +50,32 @@ const UploadProject = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEnhance = async (e) => {
+    e.preventDefault();
+    if (!aiIdea.trim()) return;
+    setEnhancing(true);
+    setError('');
+    try {
+      const token = localStorage.getItem('opeer_token');
+      const res = await fetch('/api/projects/enhance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ idea: aiIdea })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFormData(prev => ({ ...prev, ...data }));
+        toast.success('Project details magically generated!');
+      } else {
+        setError('Failed to enhance project with AI');
+      }
+    } catch {
+      setError('AI Service is unavailable right now.');
+    } finally {
+      setEnhancing(false);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -104,6 +132,30 @@ const UploadProject = () => {
         </div>
 
         <form className={`${styles.uploadCard} fadeInUp`} onSubmit={handleSubmit} style={{ animationDelay: '80ms' }}>
+          {/* AI Enhancer Block */}
+          <div className={styles.aiContainer}>
+            <h3 className={styles.aiHeader}>
+               <span className={styles.aiHeaderIcon}>✨</span> Have an idea? Let AI write the details
+            </h3>
+            <div className={styles.aiInputGroup}>
+                <input 
+                  type="text" 
+                  placeholder="e.g. A hardware robot that cleans the college library..." 
+                  value={aiIdea}
+                  onChange={(e) => setAiIdea(e.target.value)}
+                  className={styles.aiInput}
+                />
+                <button 
+                  type="button" 
+                  disabled={enhancing || !aiIdea.trim()}
+                  onClick={handleEnhance}
+                  className={styles.aiBtn}
+                >
+                  {enhancing ? 'Generating...' : 'Auto-Fill'}
+                </button>
+            </div>
+          </div>
+
           {error && (
             <div style={{
               background: 'rgba(239, 68, 68, 0.1)',

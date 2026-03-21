@@ -259,3 +259,47 @@
     border-radius: 6px;
     cursor: pointer;
 }
+
+/* AI Generate Header */
+.kanbanHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 4px;
+}
+
+.kanbanTitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+    font-family: var(--font-display, inherit);
+    margin: 0;
+}
+
+.aiGenerateBtn {
+    background: linear-gradient(135deg, #a855f7 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.35);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aiGenerateBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    background: linear-gradient(135deg, #b062ff 0%, #4f91ff 100%);
+}
+
+.aiGenerateBtn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}

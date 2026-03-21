@@ -9,7 +9,7 @@
 }
 
 .innerContainer {
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -135,8 +135,8 @@
     margin: 0;
     line-height: 1.6;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
-    line-clamp: 3;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }

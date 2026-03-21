@@ -232,21 +232,29 @@ const ExploreProjects = () => {
                                         {/* AI Recommendation Reason */}
                                         {aiRecommendations && aiRecommendations[project.id] && (
                                             <div style={{
-                                                padding: '10px 12px', background: 'rgba(168, 85, 247, 0.1)',
-                                                borderLeft: '3px solid #c084fc', borderRadius: '4px 8px 8px 4px',
+                                                padding: '12px', background: 'rgba(168, 85, 247, 0.08)',
+                                                border: '1px solid rgba(168, 85, 247, 0.2)', borderRadius: '12px',
                                                 marginBottom: '16px', fontSize: '13px', color: '#e4e4e7',
-                                                display: 'flex', gap: '8px', alignItems: 'flex-start',
+                                                display: 'flex', gap: '12px', alignItems: 'center',
                                                 lineHeight: '1.5'
                                             }}>
-                                                <span style={{ fontSize: '16px' }}>✨</span>
-                                                <div style={{ flex: 1 }}>
-                                                    <div style={{ 
-                                                        fontWeight: 'bold', 
-                                                        color: aiRecommendations[project.id].score >= 80 ? '#4ade80' : aiRecommendations[project.id].score >= 50 ? '#facc15' : '#f87171',
-                                                        marginBottom: '4px'
-                                                    }}>
-                                                        Match Score: {aiRecommendations[project.id].score}%
-                                                    </div>
+                                                <div style={{
+                                                    background: aiRecommendations[project.id].score >= 80 ? 'rgba(74, 222, 128, 0.15)' : aiRecommendations[project.id].score >= 50 ? 'rgba(250, 204, 21, 0.15)' : 'rgba(248, 113, 113, 0.15)',
+                                                    color: aiRecommendations[project.id].score >= 80 ? '#4ade80' : aiRecommendations[project.id].score >= 50 ? '#facc15' : '#f87171',
+                                                    padding: '6px 10px', borderRadius: '8px', fontWeight: 'bold', fontSize: '14px',
+                                                    border: `1px solid ${aiRecommendations[project.id].score >= 80 ? 'rgba(74, 222, 128, 0.4)' : aiRecommendations[project.id].score >= 50 ? 'rgba(250, 204, 21, 0.4)' : 'rgba(248, 113, 113, 0.4)'}`,
+                                                    whiteSpace: 'nowrap'
+                                                }}>
+                                                    {aiRecommendations[project.id].score}% Match
+                                                </div>
+                                                <div style={{ 
+                                                    flex: 1, 
+                                                    color: '#d4d4d8',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
+                                                }}>
                                                     {aiRecommendations[project.id].reason}
                                                 </div>
                                             </div>

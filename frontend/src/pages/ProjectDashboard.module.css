@@ -413,7 +413,8 @@
     margin-bottom: 0;
 }
 
-.msgBubbleAi ul, .msgBubbleAi ol {
+.msgBubbleAi ul,
+.msgBubbleAi ol {
     margin: 0.5em 0;
     padding-left: 1.5em;
 }

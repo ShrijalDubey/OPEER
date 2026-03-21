@@ -88,8 +88,8 @@ export async function generateBatchProjectMatchScores(userContext, projects) {
     
     Projects:
     ${JSON.stringify(projects.map(p => ({
-      id: p.id, title: p.title, description: p.description, skills: p.skills, goal: p.goal 
-    })), null, 2)}
+    id: p.id, title: p.title, description: p.description, skills: p.skills, goal: p.goal
+  })), null, 2)}
     
     Please provide the JSON array result.
   `;
@@ -101,6 +101,51 @@ export async function generateBatchProjectMatchScores(userContext, projects) {
   } catch (err) {
     console.error('Failed to parse batch match score:', err);
     return [];
+  }
+}
+
+export async function generateProjectEnhancement(idea) {
+  const systemInstruction = `
+    You are an AI assistant helping a student create a project on the OPEER platform.
+    Take their short idea and expand it into a full, professional project specification.
+    Return exactly a valid JSON object (no markdown block, just raw JSON) with these keys:
+    {
+      "title": "A catchy, impressive title",
+      "description": "A detailed 2-3 paragraph description explaining what they are building, the problem it solves, and the end goal.",
+      "skills": "Comma-separated list of required technical skills (e.g. React, Node.js, Hardware)",
+      "dept": "The most relevant university department",
+      "year": "Any",
+      "github": ""
+    }
+  `;
+  try {
+    let result = await askGemini(systemInstruction, `Idea: ${idea}`);
+    result = result.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(result);
+  } catch (err) {
+    console.error('Failed to parse generation:', err);
+    throw new Error('AI Generation failed');
+  }
+}
+
+export async function generateKanbanTasks(projectContext) {
+  const systemInstruction = `
+    You are an AI assistant helping a team structure their project.
+    Read the project goal and execution plan, and generate 5 to 10 actionable Kanban tasks.
+    Return exactly a valid JSON array of objects (no markdown block, just raw JSON).
+    Format:
+    [
+      { "title": "Setup repository", "description": "Initialize Git and React app.", "priority": "high" },
+      { "title": "Design DB Schema", "description": "Create Prisma models.", "priority": "medium" }
+    ]
+  `;
+  try {
+    let result = await askGemini(systemInstruction, `Project Details: ${JSON.stringify(projectContext)}`);
+    result = result.replace(/```json/g, '').replace(/```/g, '').trim();
+    return JSON.parse(result);
+  } catch (err) {
+    console.error('Failed to parse generation:', err);
+    throw new Error('AI Task Generation failed');
   }
 }
 

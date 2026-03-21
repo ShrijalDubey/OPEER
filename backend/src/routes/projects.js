@@ -3,7 +3,7 @@ import { io } from '../index.js';
 import prisma from '../lib/prisma.js';
 import { requireAuth, optionalAuth } from '../middleware/auth.js';
 import * as meetingController from '../controllers/meetingController.js';
-import { generateProjectMatchScore, generateBatchProjectMatchScores } from '../lib/ai.js';
+import { generateProjectMatchScore, generateBatchProjectMatchScores, generateProjectEnhancement, generateKanbanTasks } from '../lib/ai.js';
 
 const router = Router();
 
@@ -238,6 +238,58 @@ router.post('/recommend-batch', requireAuth, async (req, res) => {
     }
 });
 
+// ─── AI Project Enhancer ────────────────────────────────
+
+router.post('/enhance', requireAuth, async (req, res) => {
+    try {
+        const { idea } = req.body;
+        if (!idea) return res.status(400).json({ error: 'Idea is required' });
+
+        const enhancedData = await generateProjectEnhancement(idea);
+        res.json(enhancedData);
+    } catch (err) {
+        console.error('POST /api/projects/enhance error:', err);
+        res.status(500).json({ error: 'Failed to enhance project' });
+    }
+});
+
+// ─── AI Task Generator ────────────────────────────────
+
+router.post('/:id/tasks/generate', requireAuth, async (req, res) => {
+    try {
+        const project = await prisma.project.findUnique({ where: { id: req.params.id } });
+        if (!project) return res.status(404).json({ error: 'Project not found' });
+
+        if (project.authorId !== req.user.id) {
+            return res.status(403).json({ error: 'Only the project owner can auto-generate tasks' });
+        }
+
+        const tasksData = await generateKanbanTasks({
+            goal: project.goal || 'No specific goal',
+            executionPlan: project.executionPlan || 'No execution plan provided',
+            title: project.title,
+            description: project.description
+        });
+
+        const createdTasks = await Promise.all(
+            tasksData.map(t => prisma.task.create({
+                data: {
+                    projectId: project.id,
+                    title: t.title,
+                    description: t.description || '',
+                    status: 'todo',
+                    priority: t.priority || 'medium'
+                }
+            }))
+        );
+
+        res.json({ tasks: createdTasks });
+    } catch (err) {
+        console.error('Task Generation Error:', err);
+        res.status(500).json({ error: 'Failed to generate tasks' });
+    }
+});
+
 // ─── Apply to a project (auth required) ─────────────────
 
 router.post('/:id/apply', requireAuth, async (req, res) => {
@@ -281,12 +333,12 @@ router.post('/:id/apply', requireAuth, async (req, res) => {
 
         // Notify owner
         const notification = await prisma.notification.create({
-        data: {
-            userId: project.authorId,
-            type: 'info',
-            message: `New application from ${req.user.name} for "${project.title}"`,
-            link: `/projects/${project.id}/dashboard`
-        }
+            data: {
+                userId: project.authorId,
+                type: 'info',
+                message: `New application from ${req.user.name} for "${project.title}"`,
+                link: `/projects/${project.id}/dashboard`
+            }
         });
 
         io.to(`user:${project.authorId}`).emit('notification:new', notification);
@@ -348,12 +400,12 @@ router.patch('/:id/applications/:appId', requireAuth, async (req, res) => {
 
         // Notify applicant
         const notif = await prisma.notification.create({
-        data: {
-            userId: application.userId,
-            type: status === 'accepted' ? 'success' : 'error',
-            message: `Your application for "${project.title}" was ${status}`,
-            link: status === 'accepted' ? `/projects/${project.id}/dashboard` : null
-        }
+            data: {
+                userId: application.userId,
+                type: status === 'accepted' ? 'success' : 'error',
+                message: `Your application for "${project.title}" was ${status}`,
+                link: status === 'accepted' ? `/projects/${project.id}/dashboard` : null
+            }
         });
 
         io.to(`user:${application.userId}`).emit('notification:new', notif);
@@ -382,12 +434,12 @@ router.delete('/:id/leave', requireAuth, async (req, res) => {
 
         // Notify the owner
         const notif = await prisma.notification.create({
-        data: {
-            userId: project.authorId,
-            type: 'warning',
-            message: `${req.user.name} left your project "${project.title}"`,
-            link: `/projects/${project.id}/dashboard`
-        }
+            data: {
+                userId: project.authorId,
+                type: 'warning',
+                message: `${req.user.name} left your project "${project.title}"`,
+                link: `/projects/${project.id}/dashboard`
+            }
         });
 
         io.to(`user:${project.authorId}`).emit('notification:new', notif);
@@ -417,12 +469,12 @@ router.delete('/:id/members/:userId', requireAuth, async (req, res) => {
 
         // Notify the kicked member
         const notif = await prisma.notification.create({
-        data: {
-            userId: req.params.userId,
-            type: 'warning',
-            message: `You were removed from "${project.title}"`,
-            link: null
-        }
+            data: {
+                userId: req.params.userId,
+                type: 'warning',
+                message: `You were removed from "${project.title}"`,
+                link: null
+            }
         });
 
         io.to(`user:${req.params.userId}`).emit('notification:new', notif);

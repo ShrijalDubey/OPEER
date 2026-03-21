@@ -1,12 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-/**
- * Auth middleware — verifies JWT from cookie or Authorization header
- * and attaches `req.user` to the request.
- *
- * Usage:
- *   router.get('/protected', requireAuth, (req, res) => { ... })
- */
 export function requireAuth(req, res, next) {
     // 1. Try cookie first, then Authorization header
     const token =

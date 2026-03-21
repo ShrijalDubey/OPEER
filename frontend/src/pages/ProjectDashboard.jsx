@@ -181,7 +181,7 @@ const ProjectDashboard = () => {
         } catch { /* ignore */ }
     };
 
-    
+
 
     useEffect(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });

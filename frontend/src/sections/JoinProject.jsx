@@ -266,7 +266,7 @@ const JoinProject = () => {
                   )}
 
                   <h2 className={styles.projectTitle}>{proj.title}</h2>
-                  <p style={{ color: '#a1a1aa', lineHeight: '1.6', fontSize: '15px', marginBottom: '30px' }}>{proj.description}</p>
+                  <p className={styles.projectDesc}>{proj.description}</p>
 
                   {proj.skills?.length > 0 && (
                     <>
